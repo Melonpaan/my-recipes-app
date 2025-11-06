@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { prisma } from '../../db/prisma'
 
 export async function findIngredients(params: {
@@ -6,8 +7,7 @@ export async function findIngredients(params: {
   search?: string
   unitId?: string
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: any = {}
+  const where: Prisma.ingredientsWhereInput = {}
   if (params.search) where.name = { contains: params.search }
   if (params.unitId) where.id_unit = BigInt(params.unitId)
 

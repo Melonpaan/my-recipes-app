@@ -1,8 +1,8 @@
+import { Prisma } from '@prisma/client'
 import { prisma } from '../../db/prisma'
 
 export async function findCategories(params: { page: number; pageSize: number; search?: string }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: any = {}
+  const where: Prisma.categoriesWhereInput = {}
   if (params.search) where.name = { contains: params.search }
 
   const [total, rows] = await Promise.all([

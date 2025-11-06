@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { prisma } from '../../db/prisma'
 import type { RecipeDTO } from '../../../shared/ipc'
 
@@ -41,8 +42,7 @@ export async function findRecipes(params: {
   categoryId?: string
   search?: string
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: any = {}
+  const where: Prisma.recipesWhereInput = {}
   if (params.categoryId) where.id_category = BigInt(params.categoryId)
   if (params.search) where.title = { contains: params.search }
 

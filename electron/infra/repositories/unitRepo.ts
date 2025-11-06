@@ -1,8 +1,8 @@
+import { Prisma } from '@prisma/client'
 import { prisma } from '../../db/prisma'
 
 export async function findUnits(params: { page: number; pageSize: number; search?: string }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: any = {}
+  const where: Prisma.unitsWhereInput = {}
   if (params.search) {
     // search in code or name
     where.OR = [

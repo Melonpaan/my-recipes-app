@@ -1,17 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
-import { api } from '../../../ipc/api'
-import { useToast } from '../../../components/Toaster'
+import { useMemo, useState } from 'react'
+import {
+  useIngredientsQuery,
+  useUnitsQuery,
+  useCreateIngredient,
+  useUpdateIngredient,
+  useDeleteIngredient,
+} from './useIngredientsQuery'
 
 type Row = { id: string; name: string; unitId: string; stockQty: string }
-type Unit = { id: string; code: string; name: string }
 type FormData = { id?: string; name: string; unitId: string; stockQty: string }
 type FormMode = 'create' | 'edit'
 
 export function useIngredients() {
-  const [items, setItems] = useState<Row[]>([])
-  const [units, setUnits] = useState<Unit[]>([])
-  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
   const [formOpen, setFormOpen] = useState(false)
   const [formMode, setFormMode] = useState<FormMode>('create')
   const [form, setForm] = useState<FormData>({
@@ -19,34 +21,31 @@ export function useIngredients() {
     unitId: '',
     stockQty: '0',
   })
-  const toast = useToast()
 
+  // React Query hooks
+  const { data: ingredientsData, isLoading: isLoadingIngredients } = useIngredientsQuery(debouncedSearch)
+  const { data: unitsData, isLoading: isLoadingUnits } = useUnitsQuery()
+  const createMutation = useCreateIngredient()
+  const updateMutation = useUpdateIngredient()
+  const deleteMutation = useDeleteIngredient()
+
+  const loading = isLoadingIngredients || isLoadingUnits
+
+  // Dériver les unités et calculer la map de conversion
+  const units = useMemo(() => unitsData?.items ?? [], [unitsData])
+  
   const unitIdToCode = useMemo(() => {
     const map = new Map<string, string>()
-    for (const u of units) map.set(u.id, u.code)
+    const unitsList = unitsData?.items ?? []
+    for (const u of unitsList) map.set(u.id, u.code)
     return map
-  }, [units])
+  }, [unitsData])
 
-  async function loadData(query?: string) {
-    setLoading(true)
-    const [ing, un] = await Promise.all([
-      api.ingredients.list({ page: 1, pageSize: 50, search: query && query.length ? query : undefined }),
-      api.units.list({ page: 1, pageSize: 100 }),
-    ])
-    setItems(ing.items)
-    setUnits(un.items)
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    void loadData()
-  }, [])
-
+  // Dériver les items visibles triés
   const visibleItems = useMemo(() => {
-    return items
-      .filter((i) => (search ? i.name.toLowerCase().includes(search.toLowerCase()) : true))
-      .sort((a, b) => a.name.localeCompare(b.name))
-  }, [items, search])
+    const itemsList = ingredientsData?.items ?? []
+    return itemsList.sort((a, b) => a.name.localeCompare(b.name))
+  }, [ingredientsData])
 
   function openCreateForm() {
     setFormMode('create')
@@ -64,25 +63,12 @@ export function useIngredients() {
     setFormOpen(false)
   }
 
-  async function handleDelete(id: string) {
+  function handleDelete(id: string) {
     if (!confirm('Delete this ingredient?')) return
-    try {
-      const usage = await api.ingredients.usage({ id })
-      if (usage.count > 0) {
-        toast.error(`Used by ${usage.count} recipe(s)`)
-        return
-      }
-      await api.ingredients.delete({ id })
-      toast.success('Deleted successfully')
-      void loadData(search)
-    } catch (err: unknown) {
-      console.error(err)
-      const msg = err instanceof Error ? err.message : 'Delete failed'
-      toast.error(msg)
-    }
+    deleteMutation.mutate(id)
   }
 
-  async function handleSubmit() {
+  function handleSubmit() {
     // Basic UI validation
     const nameOk = form.name.trim().length > 0
     const unitOk = !!form.unitId
@@ -91,20 +77,17 @@ export function useIngredients() {
       alert('Please fill valid values')
       return
     }
-    try {
-      if (formMode === 'create') {
-        await api.ingredients.create({ name: form.name.trim(), unitId: form.unitId, stockQty: form.stockQty })
-        toast.success('Created successfully')
-      } else if (form.id) {
-        await api.ingredients.update({ id: form.id, name: form.name.trim(), unitId: form.unitId, stockQty: form.stockQty })
-        toast.success('Updated successfully')
-      }
-      setFormOpen(false)
-      void loadData(search)
-    } catch (err: unknown) {
-      console.error(err)
-      const msg = err instanceof Error ? err.message : 'Save failed'
-      toast.error(msg)
+
+    if (formMode === 'create') {
+      createMutation.mutate(
+        { name: form.name.trim(), unitId: form.unitId, stockQty: form.stockQty },
+        { onSuccess: () => setFormOpen(false) }
+      )
+    } else if (form.id) {
+      updateMutation.mutate(
+        { id: form.id, name: form.name.trim(), unitId: form.unitId, stockQty: form.stockQty },
+        { onSuccess: () => setFormOpen(false) }
+      )
     }
   }
 
@@ -113,17 +96,17 @@ export function useIngredients() {
   }
 
   function handleSearchSubmit() {
-    void loadData(search)
+    setDebouncedSearch(search)
   }
 
   function handleSearchReset() {
     setSearch('')
-    void loadData('')
+    setDebouncedSearch('')
   }
 
   return {
     // State
-    items: visibleItems,
+    items: visibleItems, // Items triés et filtrés
     units,
     loading,
     search,
