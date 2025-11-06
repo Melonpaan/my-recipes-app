@@ -1,50 +1,27 @@
-import { useEffect, useMemo, useState } from 'react'
-import { api } from '../../ipc/api'
-import { useToast } from '../../components/Toaster'
-
-type Row = { id: string; name: string; unitId: string; stockQty: string }
-type Unit = { id: string; code: string; name: string }
+import { useIngredients } from './hooks/useIngredients'
 
 export function IngredientsPage() {
-  const [items, setItems] = useState<Row[]>([])
-  const [units, setUnits] = useState<Unit[]>([])
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
-  const [formOpen, setFormOpen] = useState(false)
-  const [formMode, setFormMode] = useState<'create' | 'edit'>('create')
-  const [form, setForm] = useState<{ id?: string; name: string; unitId: string; stockQty: string }>({
-    name: '',
-    unitId: '',
-    stockQty: '0',
-  })
-  const toast = useToast()
-
-  const unitIdToCode = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const u of units) map.set(u.id, u.code)
-    return map
-  }, [units])
-
-  async function loadData(query?: string) {
-    setLoading(true)
-    const [ing, un] = await Promise.all([
-      api.ingredients.list({ page: 1, pageSize: 50, search: query && query.length ? query : undefined }),
-      api.units.list({ page: 1, pageSize: 100 }),
-    ])
-    setItems(ing.items)
-    setUnits(un.items)
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    void loadData()
-  }, [])
+  const {
+    items: visible,
+    units,
+    loading,
+    search,
+    formOpen,
+    formMode,
+    form,
+    unitIdToCode,
+    setForm,
+    openCreateForm,
+    openEditForm,
+    closeForm,
+    handleDelete,
+    handleSubmit,
+    handleSearchChange,
+    handleSearchSubmit,
+    handleSearchReset,
+  } = useIngredients()
 
   if (loading) return <div className="p-8 max-w-5xl mx-auto">Loading…</div>
-
-  const visible = items
-    .filter((i) => (search ? i.name.toLowerCase().includes(search.toLowerCase()) : true))
-    .sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <div className="px-6 py-8 max-w-5xl mx-auto">
@@ -55,20 +32,16 @@ export function IngredientsPage() {
           className="border border-white/20 rounded-md px-3 py-2 w-full sm:w-72 bg-transparent"
           placeholder="Search ingredients…"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleSearchChange(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') void loadData(search)
+            if (e.key === 'Enter') handleSearchSubmit()
           }}
         />
-        <button className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10" onClick={() => void loadData(search)}>Search</button>
-        <button className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10" onClick={() => { setSearch(''); void loadData('') }}>Reset</button>
+        <button className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10" onClick={handleSearchSubmit}>Search</button>
+        <button className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10" onClick={handleSearchReset}>Reset</button>
         <button
           className="ml-auto px-4 py-2 rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-500"
-          onClick={() => {
-            setFormMode('create')
-            setForm({ name: '', unitId: units[0]?.id ?? '', stockQty: '0' })
-            setFormOpen(true)
-          }}
+          onClick={openCreateForm}
         >
           New
         </button>
@@ -100,33 +73,13 @@ export function IngredientsPage() {
                 <td className="px-4 py-3 text-right whitespace-nowrap">
                   <button
                     className="px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 mr-2"
-                    onClick={() => {
-                      setFormMode('edit')
-                      setForm({ id: i.id, name: i.name, unitId: i.unitId, stockQty: i.stockQty })
-                      setFormOpen(true)
-                    }}
+                    onClick={() => openEditForm(i)}
                   >
                     Edit
                   </button>
                   <button
                     className="px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 text-red-400"
-                    onClick={async () => {
-                      if (!confirm('Delete this ingredient?')) return
-                      try {
-                        const usage = await api.ingredients.usage({ id: i.id })
-                        if (usage.count > 0) {
-                          toast.error(`Used by ${usage.count} recipe(s)`) 
-                          return
-                        }
-                        await api.ingredients.delete({ id: i.id })
-                        toast.success('Deleted successfully')
-                        void loadData(search)
-                      } catch (err: unknown) {
-                        console.error(err)
-                        const msg = err instanceof Error ? err.message : 'Delete failed'
-                        toast.error(msg)
-                      }
-                    }}
+                    onClick={() => handleDelete(i.id)}
                   >
                     Delete
                   </button>
@@ -175,34 +128,10 @@ export function IngredientsPage() {
               </div>
             </div>
             <div className="mt-4 flex justify-end gap-2">
-              <button className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10" onClick={() => setFormOpen(false)}>Cancel</button>
+              <button className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10" onClick={closeForm}>Cancel</button>
               <button
                 className="px-4 py-2 rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-500"
-                onClick={async () => {
-                  // Basic UI validation
-                  const nameOk = form.name.trim().length > 0
-                  const unitOk = !!form.unitId
-                  const stockOk = /^\d+(\.\d{1,3})?$/.test(form.stockQty)
-                  if (!nameOk || !unitOk || !stockOk) {
-                    alert('Please fill valid values')
-                    return
-                  }
-                  try {
-                    if (formMode === 'create') {
-                      await api.ingredients.create({ name: form.name.trim(), unitId: form.unitId, stockQty: form.stockQty })
-                      toast.success('Created successfully')
-                    } else if (form.id) {
-                      await api.ingredients.update({ id: form.id, name: form.name.trim(), unitId: form.unitId, stockQty: form.stockQty })
-                      toast.success('Updated successfully')
-                    }
-                    setFormOpen(false)
-                    void loadData(search)
-                  } catch (err: unknown) {
-                    console.error(err)
-                    const msg = err instanceof Error ? err.message : 'Save failed'
-                    toast.error(msg)
-                  }
-                }}
+                onClick={handleSubmit}
               >
                 {formMode === 'create' ? 'Create' : 'Save'}
               </button>
