@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { Prisma } from '@prisma/client'
 import type { IngredientUpdateRequest } from '../../../../shared/ipc'
 import { updateIngredient } from '../../../infra/repositories/ingredientRepo'
+import { AppError } from '../../errors'
 
 const Input = z.object({
   id: z.string().min(1),
@@ -19,7 +20,7 @@ export async function updateIngredientUc(input: IngredientUpdateRequest): Promis
     return { ok: true }
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      throw new Error('Ingredient with same name and unit already exists')
+      throw AppError.conflict('Ingredient with same name and unit already exists')
     }
     throw error
   }
