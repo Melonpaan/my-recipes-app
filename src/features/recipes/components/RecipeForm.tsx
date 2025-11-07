@@ -18,6 +18,7 @@ type RecipeFormProps = {
   onFormChange: (form: FormData) => void
   onSubmit: () => void
   onCancel: () => void
+  isEdit?: boolean
 }
 
 export function RecipeForm({
@@ -27,13 +28,14 @@ export function RecipeForm({
   onFormChange,
   onSubmit,
   onCancel,
+  isEdit = false,
 }: RecipeFormProps) {
   if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white text-black dark:bg-zinc-900 dark:text-white w-full max-w-2xl rounded-xl shadow-lg p-5">
-        <h2 className="text-lg font-semibold mb-3">Create New Recipe</h2>
+        <h2 className="text-lg font-semibold mb-3">{isEdit ? 'Edit Recipe' : 'Create New Recipe'}</h2>
         <div className="grid grid-cols-2 gap-3">
           <div className="col-span-2">
             <label className="block text-sm mb-1">Title *</label>
@@ -111,7 +113,7 @@ export function RecipeForm({
               className="px-4 py-2 rounded-md border border-transparent bg-orange-600 text-white hover:bg-orange-500"
               onClick={onSubmit}
             >
-              Create
+              {isEdit ? 'Save' : 'Create'}
             </button>
           </div>
         </div>

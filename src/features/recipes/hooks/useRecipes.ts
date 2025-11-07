@@ -11,6 +11,7 @@ type FormData = {
 
 export function useRecipes() {
   const [formOpen, setFormOpen] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState<FormData>({
     title: '',
     description: '',
@@ -38,10 +39,12 @@ export function useRecipes() {
       difficulty: null,
       categoryId: categories[0]?.id ?? '',
     })
+    setEditingId(null)
     setFormOpen(true)
   }
 
   function closeForm() {
+    setEditingId(null)
     setFormOpen(false)
   }
 
@@ -87,6 +90,7 @@ export function useRecipes() {
       difficulty: r.difficulty ?? null,
       categoryId: r.categoryId,
     })
+    setEditingId(id)
     setFormOpen(true)
   }
 
@@ -120,9 +124,11 @@ export function useRecipes() {
     loading,
     formOpen,
     form,
+    editingId,
 
     // Actions
     setForm,
+    setEditingId,
     openCreateForm,
     closeForm,
     handleSubmit,

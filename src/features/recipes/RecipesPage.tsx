@@ -2,7 +2,7 @@ import { useRecipes } from './hooks/useRecipes'
 import { RecipeForm } from './components'
 
 export function RecipesPage() {
-  const { recipes, categories, loading, formOpen, form, setForm, openCreateForm, closeForm, handleSubmit, handleDelete, handleEdit, handleUpdate } =
+  const { recipes, categories, loading, formOpen, form, setForm, openCreateForm, closeForm, handleSubmit, handleDelete, handleEdit, handleUpdate, editingId } =
     useRecipes()
 
   if (loading) return <div className="p-8 max-w-5xl mx-auto">Loading…</div>
@@ -34,11 +34,11 @@ export function RecipesPage() {
               {recipes.map((r) => (
                 <tr key={r.id}>
                   <td className="px-4 py-3">{r.title}</td>
-                  <td className="px-4 py-3">{r.categoryId}</td>
+                  <td className="px-4 py-3">{categories.find((c) => c.id === r.categoryId)?.name ?? r.categoryId}</td>
                   <td className="px-4 py-3">{r.difficulty ?? '-'}</td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button className="px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 mr-2" onClick={() => handleEdit(r.id)}>Edit</button>
-                    <button className="px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 text-red-400" onClick={() => handleDelete(r.id)}>Delete</button>
+                    <button className="px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 text-red-400" onClick={() => { if (confirm('Delete this recipe?')) handleDelete(r.id) }}>Delete</button>
                   </td>
                 </tr>
               ))}
@@ -52,13 +52,8 @@ export function RecipesPage() {
         form={form}
         categories={categories}
         onFormChange={setForm}
-        onSubmit={() => {
-          // crude heuristic: if there is a recipe currently being edited, call update
-          // For simplicity, store the editing id in a data-* attr or local state; here we'll infer by title match (temporary minimalism)
-          const editing = recipes.find((r) => r.title === form.title && r.categoryId === form.categoryId)
-          if (editing) handleUpdate(editing.id)
-          else handleSubmit()
-        }}
+        isEdit={!!editingId}
+        onSubmit={() => (editingId ? handleUpdate(editingId) : handleSubmit())}
         onCancel={closeForm}
       />
     </div>
