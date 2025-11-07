@@ -7,7 +7,7 @@ import {
   useDeleteIngredient,
 } from './useIngredientsQuery'
 
-type Row = { id: string; name: string; unitId: string; stockQty: string }
+type Row = { id: string; name: string; unitId: string; stockQty: number }
 type FormData = { id?: string; name: string; unitId: string; stockQty: string }
 type FormMode = 'create' | 'edit'
 
@@ -55,7 +55,7 @@ export function useIngredients() {
 
   function openEditForm(item: Row) {
     setFormMode('edit')
-    setForm({ id: item.id, name: item.name, unitId: item.unitId, stockQty: item.stockQty })
+    setForm({ id: item.id, name: item.name, unitId: item.unitId, stockQty: item.stockQty.toString() })
     setFormOpen(true)
   }
 
@@ -80,12 +80,12 @@ export function useIngredients() {
 
     if (formMode === 'create') {
       createMutation.mutate(
-        { name: form.name.trim(), unitId: form.unitId, stockQty: form.stockQty },
+        { name: form.name.trim(), unitId: form.unitId, stockQty: parseFloat(form.stockQty) },
         { onSuccess: () => setFormOpen(false) }
       )
     } else if (form.id) {
       updateMutation.mutate(
-        { id: form.id, name: form.name.trim(), unitId: form.unitId, stockQty: form.stockQty },
+        { id: form.id, name: form.name.trim(), unitId: form.unitId, stockQty: parseFloat(form.stockQty) },
         { onSuccess: () => setFormOpen(false) }
       )
     }

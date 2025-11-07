@@ -2,7 +2,7 @@ type Ingredient = {
   id: string
   name: string
   unitId: string
-  stockQty: string
+  stockQty: number
 }
 
 type IngredientsTableProps = {
