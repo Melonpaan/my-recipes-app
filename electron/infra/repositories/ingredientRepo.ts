@@ -21,35 +21,35 @@ export async function findIngredients(params: {
     }),
   ])
 
-  return {
-    total,
-    rows: rows.map((r) => ({
-      id: r.id_ingredient.toString(),
-      name: r.name,
-      unitId: r.id_unit.toString(),
-      stockQty: r.stock_qty.toString(),
-    })),
-  }
+    return {
+      total,
+      rows: rows.map((r) => ({
+        id: r.id_ingredient.toString(),
+        name: r.name,
+        unitId: r.id_unit.toString(),
+        stockQty: Number(r.stock_qty.toString()),
+      })),
+    }
 }
 
-export async function createIngredient(data: { name: string; unitId: string; stockQty: string }) {
+export async function createIngredient(data: { name: string; unitId: string; stockQty: number }) {
   const row = await prisma.ingredients.create({
     data: {
       name: data.name,
       id_unit: BigInt(data.unitId),
-      stock_qty: data.stockQty,
+      stock_qty: data.stockQty.toString(),
     },
   })
   return { id: row.id_ingredient.toString() }
 }
 
-export async function updateIngredient(data: { id: string; name?: string; unitId?: string; stockQty?: string }) {
+export async function updateIngredient(data: { id: string; name?: string; unitId?: string; stockQty?: number }) {
   await prisma.ingredients.update({
     where: { id_ingredient: BigInt(data.id) },
     data: {
       ...(data.name !== undefined ? { name: data.name } : {}),
       ...(data.unitId !== undefined ? { id_unit: BigInt(data.unitId) } : {}),
-      ...(data.stockQty !== undefined ? { stock_qty: data.stockQty } : {}),
+      ...(data.stockQty !== undefined ? { stock_qty: data.stockQty.toString() } : {}),
     },
   })
 }

@@ -7,7 +7,7 @@ import { AppError } from '../../errors'
 const Input = z.object({
   name: z.string().min(1).max(120),
   unitId: z.string().min(1),
-  stockQty: z.string().regex(/^\d+(\.\d{1,3})?$/).optional().default('0'),
+  stockQty: z.coerce.number().min(0).default(0),
 })
 
 export async function createIngredientUc(input: IngredientCreateRequest): Promise<IngredientCreateResponse> {

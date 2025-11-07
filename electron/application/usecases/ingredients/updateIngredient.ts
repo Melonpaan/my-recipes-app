@@ -8,7 +8,7 @@ const Input = z.object({
   id: z.string().min(1),
   name: z.string().min(1).max(120).optional(),
   unitId: z.string().min(1).optional(),
-  stockQty: z.string().regex(/^\d+(\.\d{1,3})?$/).optional(),
+  stockQty: z.coerce.number().min(0).optional(),
 }).refine((d) => d.name !== undefined || d.unitId !== undefined || d.stockQty !== undefined, {
   message: 'Nothing to update',
 })
