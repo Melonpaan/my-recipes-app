@@ -5,6 +5,8 @@ export const Channels = {
   Recipes_List: 'recipes:list',
   Recipes_Get: 'recipes:get',
   Recipes_Create: 'recipes:create',
+  Recipes_Update: 'recipes:update',
+  Recipes_Delete: 'recipes:delete',
   Ingredients_List: 'ingredients:list',
   Ingredients_Create: 'ingredients:create',
   Ingredients_Update: 'ingredients:update',
@@ -51,6 +53,18 @@ export interface RecipesCreateRequest {
   userId?: string | null
 }
 export interface RecipesCreateResponse { id: string }
+
+export interface RecipesUpdateRequest {
+  id: string
+  title?: string
+  description?: string | null
+  prepTime?: number | null
+  difficulty?: 'Easy' | 'Medium' | 'Hard' | null
+  categoryId?: string
+  userId?: string | null
+}
+
+export interface RecipesDeleteRequest { id: string }
 
 // Ingredients
 export interface IngredientDTO {
@@ -130,6 +144,8 @@ export interface InvokeContracts {
   [Channels.Recipes_List]: { request: RecipesListRequest; response: RecipesListResponse }
   [Channels.Recipes_Get]: { request: RecipesGetRequest; response: RecipesGetResponse }
   [Channels.Recipes_Create]: { request: RecipesCreateRequest; response: RecipesCreateResponse }
+  [Channels.Recipes_Update]: { request: RecipesUpdateRequest; response: { ok: true } }
+  [Channels.Recipes_Delete]: { request: RecipesDeleteRequest; response: { ok: true } }
 
   [Channels.Ingredients_List]: { request: IngredientsListRequest; response: IngredientsListResponse }
   [Channels.Ingredients_Create]: { request: IngredientCreateRequest; response: IngredientCreateResponse }

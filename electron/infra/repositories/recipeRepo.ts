@@ -88,3 +88,29 @@ export async function createRecipe(data: {
   return { id: toId(created.id_recipe) }
 }
 
+export async function updateRecipe(data: {
+  id: string
+  title?: string
+  description?: string | null
+  prepTime?: number | null
+  difficulty?: 'Easy' | 'Medium' | 'Hard' | null
+  categoryId?: string
+  userId?: string | null
+}) {
+  await prisma.recipes.update({
+    where: { id_recipe: BigInt(data.id) },
+    data: {
+      ...(data.title !== undefined ? { title: data.title } : {}),
+      ...(data.description !== undefined ? { description: data.description } : {}),
+      ...(data.prepTime !== undefined ? { prep_time: data.prepTime } : {}),
+      ...(data.difficulty !== undefined ? { difficulty: data.difficulty } : {}),
+      ...(data.categoryId !== undefined ? { id_category: BigInt(data.categoryId) } : {}),
+      ...(data.userId !== undefined ? { id_user: data.userId != null ? BigInt(data.userId) : null } : {}),
+    },
+  })
+}
+
+export async function deleteRecipe(id: string) {
+  await prisma.recipes.delete({ where: { id_recipe: BigInt(id) } })
+}
+

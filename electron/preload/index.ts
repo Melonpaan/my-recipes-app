@@ -15,6 +15,8 @@ import {
   type RecipesListResponse,
   type RecipesCreateRequest,
   type RecipesCreateResponse,
+  type RecipesUpdateRequest,
+  type RecipesDeleteRequest,
   type IngredientUsageRequest,
   type IngredientUsageResponse,
 } from '../../shared/ipc'
@@ -46,6 +48,10 @@ const api = {
       ipcRenderer.invoke(Channels.Recipes_List, req) as Promise<RecipesListResponse>,
     create: (req: RecipesCreateRequest) =>
       ipcRenderer.invoke(Channels.Recipes_Create, req) as Promise<RecipesCreateResponse>,
+    update: (req: RecipesUpdateRequest) =>
+      ipcRenderer.invoke(Channels.Recipes_Update, req) as Promise<{ ok: true }>,
+    delete: (req: RecipesDeleteRequest) =>
+      ipcRenderer.invoke(Channels.Recipes_Delete, req) as Promise<{ ok: true }>,
   },
 } as const
 

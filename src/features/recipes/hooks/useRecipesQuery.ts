@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../../ipc/api'
 import { useToast } from '../../../components/Toaster'
-import type { RecipesCreateRequest } from '../../../../shared/ipc'
+import type { RecipesCreateRequest, RecipesUpdateRequest, RecipesDeleteRequest } from '../../../../shared/ipc'
 
 export function useRecipesQuery(search?: string, categoryId?: string) {
   return useQuery({
@@ -31,6 +31,32 @@ export function useCreateRecipe() {
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to create recipe')
     },
+  })
+}
+
+export function useUpdateRecipe() {
+  const queryClient = useQueryClient()
+  const toast = useToast()
+  return useMutation({
+    mutationFn: (data: RecipesUpdateRequest) => api.recipes.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recipes'] })
+      toast.success('Recipe updated')
+    },
+    onError: (error: Error) => toast.error(error.message || 'Failed to update recipe'),
+  })
+}
+
+export function useDeleteRecipe() {
+  const queryClient = useQueryClient()
+  const toast = useToast()
+  return useMutation({
+    mutationFn: (data: RecipesDeleteRequest) => api.recipes.delete(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recipes'] })
+      toast.success('Recipe deleted')
+    },
+    onError: (error: Error) => toast.error(error.message || 'Failed to delete recipe'),
   })
 }
 

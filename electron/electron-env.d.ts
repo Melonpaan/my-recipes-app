@@ -36,6 +36,8 @@ type RecipesListRequest = import('../shared/ipc').RecipesListRequest
 type RecipesListResponse = import('../shared/ipc').RecipesListResponse
 type RecipesCreateRequest = import('../shared/ipc').RecipesCreateRequest
 type RecipesCreateResponse = import('../shared/ipc').RecipesCreateResponse
+type RecipesUpdateRequest = import('../shared/ipc').RecipesUpdateRequest
+type RecipesDeleteRequest = import('../shared/ipc').RecipesDeleteRequest
 type IngredientUsageRequest = import('../shared/ipc').IngredientUsageRequest
 type IngredientUsageResponse = import('../shared/ipc').IngredientUsageResponse
 
@@ -57,6 +59,8 @@ interface Window {
     recipes: {
       list(req?: RecipesListRequest): Promise<RecipesListResponse>
       create(req: RecipesCreateRequest): Promise<RecipesCreateResponse>
+      update(req: RecipesUpdateRequest): Promise<{ ok: true }>
+      delete(req: RecipesDeleteRequest): Promise<{ ok: true }>
     }
   }
 }

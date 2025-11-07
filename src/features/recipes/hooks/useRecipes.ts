@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useRecipesQuery, useCategoriesQuery, useCreateRecipe } from './useRecipesQuery'
+import { useRecipesQuery, useCategoriesQuery, useCreateRecipe, useUpdateRecipe, useDeleteRecipe } from './useRecipesQuery'
 
 type FormData = {
   title: string
@@ -23,6 +23,8 @@ export function useRecipes() {
   const { data: recipesData, isLoading: isLoadingRecipes } = useRecipesQuery()
   const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery()
   const createMutation = useCreateRecipe()
+  const updateMutation = useUpdateRecipe()
+  const deleteMutation = useDeleteRecipe()
 
   const recipes = useMemo(() => recipesData?.items ?? [], [recipesData])
   const categories = useMemo(() => categoriesData?.items ?? [], [categoriesData])
@@ -71,6 +73,46 @@ export function useRecipes() {
     )
   }
 
+  function handleDelete(id: string) {
+    deleteMutation.mutate({ id })
+  }
+
+  function handleEdit(id: string) {
+    const r = recipes.find((x) => x.id === id)
+    if (!r) return
+    setForm({
+      title: r.title,
+      description: r.description || '',
+      prepTime: r.prepTime ?? null,
+      difficulty: r.difficulty ?? null,
+      categoryId: r.categoryId,
+    })
+    setFormOpen(true)
+  }
+
+  function handleUpdate(id: string) {
+    if (!form.title.trim()) {
+      alert('Title is required')
+      return
+    }
+    const categoryId = form.categoryId || categories[0]?.id
+    if (!categoryId) {
+      alert('Please select a category')
+      return
+    }
+    updateMutation.mutate({
+      id,
+      title: form.title.trim(),
+      description: form.description || '',
+      prepTime: form.prepTime,
+      difficulty: form.difficulty,
+      categoryId,
+      userId: null,
+    }, {
+      onSuccess: () => setFormOpen(false),
+    })
+  }
+
   return {
     // State
     recipes,
@@ -84,6 +126,9 @@ export function useRecipes() {
     openCreateForm,
     closeForm,
     handleSubmit,
+    handleDelete,
+    handleEdit,
+    handleUpdate,
   }
 }
 
