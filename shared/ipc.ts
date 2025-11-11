@@ -71,7 +71,7 @@ export interface IngredientDTO {
   id: string
   name: string
   unitId: string
-  stockQty: number
+  stockQty: string
 }
 export interface IngredientsListRequest {
   page?: number

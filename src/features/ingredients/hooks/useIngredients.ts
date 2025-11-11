@@ -6,7 +6,7 @@ import {
   useUpdateIngredient,
   useDeleteIngredient,
 } from './useIngredientsQuery'
-import { parseStockQty, stockQtyToString } from '../../../../shared/utils'
+import { parseStockQty } from '../../../../shared/utils'
 import type { IngredientDTO } from '../../../../shared/ipc'
 import { useToast } from '../../../components/Toaster'
 
@@ -58,7 +58,7 @@ export function useIngredients() {
 
   function openEditForm(item: IngredientDTO) {
     setFormMode('edit')
-    setForm({ id: item.id, name: item.name, unitId: item.unitId, stockQty: stockQtyToString(item.stockQty) })
+    setForm({ id: item.id, name: item.name, unitId: item.unitId, stockQty: item.stockQty })
     setFormOpen(true)
   }
 

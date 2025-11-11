@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client'
 import { prisma } from '../../db/prisma'
-import { stockQtyToNumber, stockQtyToString } from '../../../shared/utils'
 
 export async function findIngredients(params: {
   page: number
@@ -28,7 +27,7 @@ export async function findIngredients(params: {
       id: r.id_ingredient.toString(),
       name: r.name,
       unitId: r.id_unit.toString(),
-      stockQty: stockQtyToNumber(r.stock_qty.toString()),
+      stockQty: r.stock_qty.toString(),
     })),
   }
 }
@@ -38,7 +37,7 @@ export async function createIngredient(data: { name: string; unitId: string; sto
     data: {
       name: data.name,
       id_unit: BigInt(data.unitId),
-      stock_qty: stockQtyToString(data.stockQty),
+      stock_qty: data.stockQty.toString(),
     },
   })
   return { id: row.id_ingredient.toString() }
@@ -50,7 +49,7 @@ export async function updateIngredient(data: { id: string; name?: string; unitId
     data: {
       ...(data.name !== undefined ? { name: data.name } : {}),
       ...(data.unitId !== undefined ? { id_unit: BigInt(data.unitId) } : {}),
-      ...(data.stockQty !== undefined ? { stock_qty: stockQtyToString(data.stockQty) } : {}),
+      ...(data.stockQty !== undefined ? { stock_qty: data.stockQty.toString() } : {}),
     },
   })
 }

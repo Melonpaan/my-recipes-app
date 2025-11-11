@@ -18,6 +18,9 @@ npm install
 cp .env.example .env
 # Éditer .env avec vos informations MySQL
 
+# Ajouter les unités de mesure par défaut
+npm run db:seed
+
 # Générer le client Prisma
 npx prisma generate
 

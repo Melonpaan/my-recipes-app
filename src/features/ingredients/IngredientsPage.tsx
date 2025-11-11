@@ -22,11 +22,20 @@ export function IngredientsPage() {
     handleSearchReset,
   } = useIngredients()
 
-  if (loading) return <div className="p-8 max-w-5xl mx-auto">Loading…</div>
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="text-lg text-zinc-500 dark:text-zinc-400">Loading…</div>
+    </div>
+  )
 
   return (
-    <div className="px-6 py-8 max-w-5xl mx-auto">
-      <h1 className="text-4xl font-bold mb-8 text-center">Ingredients</h1>
+    <div className="px-6 py-10 max-w-7xl mx-auto">
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold mb-2 bg-linear-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
+          Ingredients
+        </h1>
+        <p className="text-zinc-600 dark:text-zinc-400">Manage your kitchen inventory</p>
+      </div>
 
       <IngredientsFilters
         search={search}
