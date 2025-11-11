@@ -6,8 +6,10 @@ import {
   useUpdateIngredient,
   useDeleteIngredient,
 } from './useIngredientsQuery'
+import { parseStockQty, stockQtyToString } from '../../../../shared/utils'
+import type { IngredientDTO } from '../../../../shared/ipc'
+import { useToast } from '../../../components/Toaster'
 
-type Row = { id: string; name: string; unitId: string; stockQty: number }
 type FormData = { id?: string; name: string; unitId: string; stockQty: string }
 type FormMode = 'create' | 'edit'
 
@@ -28,6 +30,7 @@ export function useIngredients() {
   const createMutation = useCreateIngredient()
   const updateMutation = useUpdateIngredient()
   const deleteMutation = useDeleteIngredient()
+  const toast = useToast()
 
   const loading = isLoadingIngredients || isLoadingUnits
 
@@ -53,9 +56,9 @@ export function useIngredients() {
     setFormOpen(true)
   }
 
-  function openEditForm(item: Row) {
+  function openEditForm(item: IngredientDTO) {
     setFormMode('edit')
-    setForm({ id: item.id, name: item.name, unitId: item.unitId, stockQty: item.stockQty.toString() })
+    setForm({ id: item.id, name: item.name, unitId: item.unitId, stockQty: stockQtyToString(item.stockQty) })
     setFormOpen(true)
   }
 
@@ -74,18 +77,18 @@ export function useIngredients() {
     const unitOk = !!form.unitId
     const stockOk = /^\d+(\.\d{1,3})?$/.test(form.stockQty)
     if (!nameOk || !unitOk || !stockOk) {
-      alert('Please fill valid values')
+      toast.error('Please fill valid values')
       return
     }
 
     if (formMode === 'create') {
       createMutation.mutate(
-        { name: form.name.trim(), unitId: form.unitId, stockQty: parseFloat(form.stockQty) },
+        { name: form.name.trim(), unitId: form.unitId, stockQty: parseStockQty(form.stockQty) },
         { onSuccess: () => setFormOpen(false) }
       )
     } else if (form.id) {
       updateMutation.mutate(
-        { id: form.id, name: form.name.trim(), unitId: form.unitId, stockQty: parseFloat(form.stockQty) },
+        { id: form.id, name: form.name.trim(), unitId: form.unitId, stockQty: parseStockQty(form.stockQty) },
         { onSuccess: () => setFormOpen(false) }
       )
     }

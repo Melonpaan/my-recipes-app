@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useRecipesQuery, useCategoriesQuery, useCreateRecipe, useUpdateRecipe, useDeleteRecipe } from './useRecipesQuery'
+import { useToast } from '../../../components/Toaster'
 
 type FormData = {
   title: string
@@ -26,6 +27,7 @@ export function useRecipes() {
   const createMutation = useCreateRecipe()
   const updateMutation = useUpdateRecipe()
   const deleteMutation = useDeleteRecipe()
+  const toast = useToast()
 
   const recipes = useMemo(() => recipesData?.items ?? [], [recipesData])
   const categories = useMemo(() => categoriesData?.items ?? [], [categoriesData])
@@ -51,13 +53,13 @@ export function useRecipes() {
   function handleSubmit() {
     // Basic validation
     if (!form.title.trim()) {
-      alert('Title is required')
+      toast.error('Title is required')
       return
     }
 
     const categoryId = form.categoryId || categories[0]?.id
     if (!categoryId) {
-      alert('Please select a category')
+      toast.error('Please select a category')
       return
     }
 
@@ -96,12 +98,12 @@ export function useRecipes() {
 
   function handleUpdate(id: string) {
     if (!form.title.trim()) {
-      alert('Title is required')
+      toast.error('Title is required')
       return
     }
     const categoryId = form.categoryId || categories[0]?.id
     if (!categoryId) {
-      alert('Please select a category')
+      toast.error('Please select a category')
       return
     }
     updateMutation.mutate({

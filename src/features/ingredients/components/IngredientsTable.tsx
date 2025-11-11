@@ -1,14 +1,9 @@
-type Ingredient = {
-  id: string
-  name: string
-  unitId: string
-  stockQty: number
-}
+import type { IngredientDTO } from '../../../../shared/ipc'
 
 type IngredientsTableProps = {
-  items: Ingredient[]
+  items: IngredientDTO[]
   unitIdToCode: Map<string, string>
-  onEdit: (item: Ingredient) => void
+  onEdit: (item: IngredientDTO) => void
   onDelete: (id: string) => void
 }
 

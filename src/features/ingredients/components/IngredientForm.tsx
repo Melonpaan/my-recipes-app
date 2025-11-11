@@ -1,8 +1,4 @@
-type Unit = {
-  id: string
-  code: string
-  name: string
-}
+import type { UnitDTO } from '../../../../shared/ipc'
 
 type FormData = {
   id?: string
@@ -15,7 +11,7 @@ type IngredientFormProps = {
   isOpen: boolean
   mode: 'create' | 'edit'
   form: FormData
-  units: Unit[]
+  units: UnitDTO[]
   onFormChange: (form: FormData) => void
   onSubmit: () => void
   onCancel: () => void

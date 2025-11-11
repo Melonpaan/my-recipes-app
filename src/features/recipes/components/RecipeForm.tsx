@@ -1,7 +1,4 @@
-type Category = {
-  id: string
-  name: string
-}
+import type { CategoryDTO } from '../../../../shared/ipc'
 
 type FormData = {
   title: string
@@ -14,7 +11,7 @@ type FormData = {
 type RecipeFormProps = {
   isOpen: boolean
   form: FormData
-  categories: Category[]
+  categories: CategoryDTO[]
   onFormChange: (form: FormData) => void
   onSubmit: () => void
   onCancel: () => void
