@@ -6,9 +6,10 @@ type RecipesTableProps = {
   categories: CategoryDTO[]
   onEdit: (id: string) => void
   onDelete: (id: string) => void
+  onManageIngredients: (id: string) => void
 }
 
-export function RecipesTable({ recipes, categories, onEdit, onDelete }: RecipesTableProps) {
+export function RecipesTable({ recipes, categories, onEdit, onDelete, onManageIngredients }: RecipesTableProps) {
   // Create a lookup map for better performance (O(1) instead of O(n) for each row)
   const categoryMap = useMemo(() => {
     return new Map(categories.map((c) => [c.id, c.name]))
@@ -32,6 +33,7 @@ export function RecipesTable({ recipes, categories, onEdit, onDelete }: RecipesT
             <th className="px-4 py-3 text-left">Title</th>
             <th className="px-4 py-3 text-left">Category</th>
             <th className="px-4 py-3 text-left">Difficulty</th>
+            <th className="px-4 py-3 text-left">Ingredients</th>
             <th className="px-4 py-3 text-right">Actions</th>
           </tr>
         </thead>
@@ -41,6 +43,14 @@ export function RecipesTable({ recipes, categories, onEdit, onDelete }: RecipesT
               <td className="px-4 py-3">{r.title}</td>
               <td className="px-4 py-3">{categoryMap.get(r.categoryId) ?? r.categoryId}</td>
               <td className="px-4 py-3">{r.difficulty ?? '-'}</td>
+              <td className="px-4 py-3">
+                <button
+                  className="px-2 py-1 text-xs rounded-md bg-orange-600/20 text-orange-400 hover:bg-orange-600/30 border border-orange-600/30"
+                  onClick={() => onManageIngredients(r.id)}
+                >
+                  Manage
+                </button>
+              </td>
               <td className="px-4 py-3 text-right whitespace-nowrap">
                 <button
                   className="px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 mr-2"

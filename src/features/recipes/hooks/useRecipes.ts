@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { useRecipesQuery, useCategoriesQuery, useCreateRecipe, useUpdateRecipe, useDeleteRecipe } from './useRecipesQuery'
+import { useRecipesQuery, useRecipeQuery, useCategoriesQuery, useCreateRecipe, useUpdateRecipe, useDeleteRecipe, useSetRecipeIngredients } from './useRecipesQuery'
+import { useIngredientsQuery, useUnitsQuery } from '../../ingredients/hooks/useIngredientsQuery'
 import { useToast } from '../../../components/Toaster'
 
 type FormData = {
@@ -21,17 +22,33 @@ export function useRecipes() {
     categoryId: '',
   })
 
+  // Manage ingredients modal state
+  const [ingredientsModalOpen, setIngredientsModalOpen] = useState(false)
+  const [managingRecipeId, setManagingRecipeId] = useState<string | null>(null)
+
   // React Query hooks
   const { data: recipesData, isLoading: isLoadingRecipes } = useRecipesQuery()
   const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery()
+  const { data: ingredientsData, isLoading: isLoadingIngredients } = useIngredientsQuery()
+  const { data: unitsData, isLoading: isLoadingUnits } = useUnitsQuery()
+  const { data: managingRecipe } = useRecipeQuery(managingRecipeId)
   const createMutation = useCreateRecipe()
   const updateMutation = useUpdateRecipe()
   const deleteMutation = useDeleteRecipe()
+  const setIngredientsMutation = useSetRecipeIngredients()
   const toast = useToast()
 
   const recipes = useMemo(() => recipesData?.items ?? [], [recipesData])
   const categories = useMemo(() => categoriesData?.items ?? [], [categoriesData])
-  const loading = isLoadingRecipes || isLoadingCategories
+  const ingredients = useMemo(() => ingredientsData?.items ?? [], [ingredientsData])
+  const units = useMemo(() => unitsData?.items ?? [], [unitsData])
+  const loading = isLoadingRecipes || isLoadingCategories || isLoadingIngredients || isLoadingUnits
+
+  const unitIdToCode = useMemo(() => {
+    const map = new Map<string, string>()
+    units.forEach((u) => map.set(u.id, u.code))
+    return map
+  }, [units])
 
   function openCreateForm() {
     setForm({
@@ -119,14 +136,37 @@ export function useRecipes() {
     })
   }
 
+  function handleManageIngredients(id: string) {
+    setManagingRecipeId(id)
+    setIngredientsModalOpen(true)
+  }
+
+  function closeIngredientsModal() {
+    setIngredientsModalOpen(false)
+    setManagingRecipeId(null)
+  }
+
+  function handleSaveIngredients(ingredientsPayload: Array<{ ingredientId: string; quantity: number }>) {
+    if (!managingRecipeId) return
+    setIngredientsMutation.mutate(
+      { recipeId: managingRecipeId, ingredients: ingredientsPayload },
+      { onSuccess: () => closeIngredientsModal() }
+    )
+  }
+
   return {
     // State
     recipes,
     categories,
+    ingredients,
+    units,
+    unitIdToCode,
     loading,
     formOpen,
     form,
     editingId,
+    ingredientsModalOpen,
+    managingRecipe,
 
     // Actions
     setForm,
@@ -137,6 +177,9 @@ export function useRecipes() {
     handleDelete,
     handleEdit,
     handleUpdate,
+    handleManageIngredients,
+    closeIngredientsModal,
+    handleSaveIngredients,
   }
 }
 

@@ -13,10 +13,13 @@ import {
   type CategoriesListResponse,
   type RecipesListRequest,
   type RecipesListResponse,
+  type RecipesGetRequest,
+  type RecipesGetResponse,
   type RecipesCreateRequest,
   type RecipesCreateResponse,
   type RecipesUpdateRequest,
   type RecipesDeleteRequest,
+  type RecipeIngredientsSetRequest,
   type IngredientUsageRequest,
   type IngredientUsageResponse,
 } from '../../shared/ipc'
@@ -46,12 +49,16 @@ const api = {
   recipes: {
     list: (req?: RecipesListRequest) =>
       ipcRenderer.invoke(Channels.Recipes_List, req) as Promise<RecipesListResponse>,
+    get: (req: RecipesGetRequest) =>
+      ipcRenderer.invoke(Channels.Recipes_Get, req) as Promise<RecipesGetResponse>,
     create: (req: RecipesCreateRequest) =>
       ipcRenderer.invoke(Channels.Recipes_Create, req) as Promise<RecipesCreateResponse>,
     update: (req: RecipesUpdateRequest) =>
       ipcRenderer.invoke(Channels.Recipes_Update, req) as Promise<{ ok: true }>,
     delete: (req: RecipesDeleteRequest) =>
       ipcRenderer.invoke(Channels.Recipes_Delete, req) as Promise<{ ok: true }>,
+    setIngredients: (req: RecipeIngredientsSetRequest) =>
+      ipcRenderer.invoke(Channels.RecipeIngredients_Set, req) as Promise<{ ok: true }>,
   },
 } as const
 

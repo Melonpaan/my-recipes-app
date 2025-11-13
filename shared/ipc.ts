@@ -7,6 +7,7 @@ export const Channels = {
   Recipes_Create: 'recipes:create',
   Recipes_Update: 'recipes:update',
   Recipes_Delete: 'recipes:delete',
+  RecipeIngredients_Set: 'recipe-ingredients:set',
   Ingredients_List: 'ingredients:list',
   Ingredients_Create: 'ingredients:create',
   Ingredients_Update: 'ingredients:update',
@@ -30,6 +31,20 @@ export interface RecipeDTO {
   updatedAt: string
 }
 
+// Recipe ingredient (jointure avec détails pour affichage)
+export interface RecipeIngredientDTO {
+  ingredientId: string
+  ingredientName: string
+  quantity: string  // Decimal → string (comme stockQty)
+  unitCode: string  // ex: "g", "ml" pour affichage
+  unitName: string  // ex: "gramme", "millilitre"
+}
+
+// Recipe avec ses ingrédients (pour recipes:get)
+export interface RecipeDetailDTO extends RecipeDTO {
+  ingredients: RecipeIngredientDTO[]
+}
+
 export interface RecipesListRequest {
   page?: number
   pageSize?: number
@@ -43,7 +58,7 @@ export interface RecipesListResponse {
   pageSize: number
 }
 export interface RecipesGetRequest { id: string }
-export type RecipesGetResponse = RecipeDTO | null
+export type RecipesGetResponse = RecipeDetailDTO | null
 export interface RecipesCreateRequest {
   title: string
   description?: string | null
@@ -65,6 +80,15 @@ export interface RecipesUpdateRequest {
 }
 
 export interface RecipesDeleteRequest { id: string }
+
+// Recipe Ingredients (composition)
+export interface RecipeIngredientsSetRequest {
+  recipeId: string
+  ingredients: Array<{
+    ingredientId: string
+    quantity: number  // UI envoie number, on convertit en Decimal
+  }>
+}
 
 // Ingredients
 export interface IngredientDTO {
@@ -146,6 +170,7 @@ export interface InvokeContracts {
   [Channels.Recipes_Create]: { request: RecipesCreateRequest; response: RecipesCreateResponse }
   [Channels.Recipes_Update]: { request: RecipesUpdateRequest; response: { ok: true } }
   [Channels.Recipes_Delete]: { request: RecipesDeleteRequest; response: { ok: true } }
+  [Channels.RecipeIngredients_Set]: { request: RecipeIngredientsSetRequest; response: { ok: true } }
 
   [Channels.Ingredients_List]: { request: IngredientsListRequest; response: IngredientsListResponse }
   [Channels.Ingredients_Create]: { request: IngredientCreateRequest; response: IngredientCreateResponse }

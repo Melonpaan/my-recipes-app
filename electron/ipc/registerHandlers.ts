@@ -6,6 +6,7 @@ import { getRecipe } from '../application/usecases/recipes/getRecipe'
 import { createRecipe } from '../application/usecases/recipes/createRecipe'
 import { updateRecipe } from '../application/usecases/recipes/updateRecipe'
 import { deleteRecipe } from '../application/usecases/recipes/deleteRecipe'
+import { setRecipeIngredients } from '../application/usecases/recipes/setRecipeIngredients'
 import { listIngredients } from '../application/usecases/ingredients/listIngredients'
 import { createIngredientUc } from '../application/usecases/ingredients/createIngredient'
 import { updateIngredientUc } from '../application/usecases/ingredients/updateIngredient'
@@ -37,6 +38,10 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(Channels.Recipes_Delete, async (_event, request) => {
     return await deleteRecipe(request)
+  })
+
+  ipcMain.handle(Channels.RecipeIngredients_Set, async (_event, request) => {
+    return await setRecipeIngredients(request)
   })
 
   ipcMain.handle(Channels.Ingredients_List, async (_event, request) => {

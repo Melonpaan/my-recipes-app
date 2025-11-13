@@ -34,10 +34,13 @@ type CategoriesListRequest = import('../shared/ipc').CategoriesListRequest
 type CategoriesListResponse = import('../shared/ipc').CategoriesListResponse
 type RecipesListRequest = import('../shared/ipc').RecipesListRequest
 type RecipesListResponse = import('../shared/ipc').RecipesListResponse
+type RecipesGetRequest = import('../shared/ipc').RecipesGetRequest
+type RecipesGetResponse = import('../shared/ipc').RecipesGetResponse
 type RecipesCreateRequest = import('../shared/ipc').RecipesCreateRequest
 type RecipesCreateResponse = import('../shared/ipc').RecipesCreateResponse
 type RecipesUpdateRequest = import('../shared/ipc').RecipesUpdateRequest
 type RecipesDeleteRequest = import('../shared/ipc').RecipesDeleteRequest
+type RecipeIngredientsSetRequest = import('../shared/ipc').RecipeIngredientsSetRequest
 type IngredientUsageRequest = import('../shared/ipc').IngredientUsageRequest
 type IngredientUsageResponse = import('../shared/ipc').IngredientUsageResponse
 
@@ -58,9 +61,11 @@ interface Window {
     }
     recipes: {
       list(req?: RecipesListRequest): Promise<RecipesListResponse>
+      get(req: RecipesGetRequest): Promise<RecipesGetResponse>
       create(req: RecipesCreateRequest): Promise<RecipesCreateResponse>
       update(req: RecipesUpdateRequest): Promise<{ ok: true }>
       delete(req: RecipesDeleteRequest): Promise<{ ok: true }>
+      setIngredients(req: RecipeIngredientsSetRequest): Promise<{ ok: true }>
     }
   }
 }

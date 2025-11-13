@@ -1,9 +1,29 @@
 import { useRecipes } from './hooks/useRecipes'
-import { RecipeForm, RecipesTable } from './components'
+import { RecipeForm, RecipesTable, ManageIngredientsModal } from './components'
 
 export function RecipesPage() {
-  const { recipes, categories, loading, formOpen, form, setForm, openCreateForm, closeForm, handleSubmit, handleDelete, handleEdit, handleUpdate, editingId } =
-    useRecipes()
+  const {
+    recipes,
+    categories,
+    ingredients,
+    unitIdToCode,
+    loading,
+    formOpen,
+    form,
+    setForm,
+    openCreateForm,
+    closeForm,
+    handleSubmit,
+    handleDelete,
+    handleEdit,
+    handleUpdate,
+    editingId,
+    ingredientsModalOpen,
+    managingRecipe,
+    handleManageIngredients,
+    closeIngredientsModal,
+    handleSaveIngredients,
+  } = useRecipes()
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[60vh]">
@@ -33,6 +53,7 @@ export function RecipesPage() {
         categories={categories}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onManageIngredients={handleManageIngredients}
       />
 
       <RecipeForm
@@ -44,6 +65,18 @@ export function RecipesPage() {
         onSubmit={() => (editingId ? handleUpdate(editingId) : handleSubmit())}
         onCancel={closeForm}
       />
+
+      {managingRecipe && (
+        <ManageIngredientsModal
+          isOpen={ingredientsModalOpen}
+          recipeTitle={managingRecipe.title}
+          currentIngredients={managingRecipe.ingredients || []}
+          availableIngredients={ingredients}
+          unitIdToCode={unitIdToCode}
+          onSave={handleSaveIngredients}
+          onCancel={closeIngredientsModal}
+        />
+      )}
     </div>
   )
 }

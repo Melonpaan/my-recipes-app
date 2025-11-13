@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { prisma } from '../../db/prisma'
-import type { RecipeDTO } from '../../../shared/ipc'
+import type { RecipeDTO, RecipeDetailDTO, RecipeIngredientDTO } from '../../../shared/ipc'
 
 function toId(value: bigint): string {
   return value.toString()
@@ -62,9 +62,37 @@ export async function findRecipes(params: {
   }
 }
 
-export async function findRecipeById(id: string): Promise<RecipeDTO | null> {
-  const row = await prisma.recipes.findUnique({ where: { id_recipe: BigInt(id) } })
-  return row ? toRecipeDTO(row) : null
+export async function findRecipeById(id: string): Promise<RecipeDetailDTO | null> {
+  const row = await prisma.recipes.findUnique({
+    where: { id_recipe: BigInt(id) },
+    include: {
+      recipe_ingredients: {
+        include: {
+          ingredients: {
+            include: {
+              units: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  if (!row) return null
+
+  // Map recipe_ingredients to RecipeIngredientDTO
+  const ingredients: RecipeIngredientDTO[] = row.recipe_ingredients.map((ri) => ({
+    ingredientId: toId(ri.ingredients.id_ingredient),
+    ingredientName: ri.ingredients.name,
+    quantity: ri.quantity_needed.toString(),
+    unitCode: ri.ingredients.units.code,
+    unitName: ri.ingredients.units.name,
+  }))
+
+  return {
+    ...toRecipeDTO(row),
+    ingredients,
+  }
 }
 
 export async function createRecipe(data: {
@@ -112,5 +140,31 @@ export async function updateRecipe(data: {
 
 export async function deleteRecipe(id: string) {
   await prisma.recipes.delete({ where: { id_recipe: BigInt(id) } })
+}
+
+export async function setRecipeIngredients(data: {
+  recipeId: string
+  ingredients: Array<{ ingredientId: string; quantity: string }>
+}) {
+  const recipeId = BigInt(data.recipeId)
+
+  // Transaction atomique : delete all + insert new
+  await prisma.$transaction(async (tx) => {
+    // 1. Supprimer tous les ingrédients existants
+    await tx.recipe_ingredients.deleteMany({
+      where: { id_recipe: recipeId },
+    })
+
+    // 2. Insérer les nouveaux (si non vide)
+    if (data.ingredients.length > 0) {
+      await tx.recipe_ingredients.createMany({
+        data: data.ingredients.map((ing) => ({
+          id_recipe: recipeId,
+          id_ingredient: BigInt(ing.ingredientId),
+          quantity_needed: ing.quantity,
+        })),
+      })
+    }
+  })
 }
 

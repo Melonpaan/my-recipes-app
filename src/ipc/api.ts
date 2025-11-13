@@ -13,10 +13,13 @@ import type {
   CategoriesListResponse,
   RecipesListRequest,
   RecipesListResponse,
+  RecipesGetRequest,
+  RecipesGetResponse,
   RecipesCreateRequest,
   RecipesCreateResponse,
   RecipesUpdateRequest,
   RecipesDeleteRequest,
+  RecipeIngredientsSetRequest,
 } from '../../shared/ipc'
 
 export const api = {
@@ -35,8 +38,10 @@ export const api = {
   },
   recipes: {
     list: (req?: RecipesListRequest) => window.api.recipes.list(req) as Promise<RecipesListResponse>,
+    get: (req: RecipesGetRequest) => window.api.recipes.get(req) as Promise<RecipesGetResponse>,
     create: (req: RecipesCreateRequest) => window.api.recipes.create(req) as Promise<RecipesCreateResponse>,
     update: (req: RecipesUpdateRequest) => window.api.recipes.update(req) as Promise<{ ok: true }>,
     delete: (req: RecipesDeleteRequest) => window.api.recipes.delete(req) as Promise<{ ok: true }>,
+    setIngredients: (req: RecipeIngredientsSetRequest) => window.api.recipes.setIngredients(req) as Promise<{ ok: true }>,
   },
 } as const
