@@ -9,7 +9,7 @@ type IngredientsTableProps = {
 
 export function IngredientsTable({ items, unitIdToCode, onEdit, onDelete }: IngredientsTableProps) {
   return (
-    <div className="overflow-hidden border border-white/10 rounded-xl bg-white/5">
+    <div className="overflow-hidden border border-zinc-200 dark:border-white/10 rounded-xl bg-zinc-50 dark:bg-white/5">
       <table className="min-w-full text-sm">
         <thead className="bg-white/10">
           <tr>
@@ -34,13 +34,13 @@ export function IngredientsTable({ items, unitIdToCode, onEdit, onDelete }: Ingr
               <td className="px-4 py-3 text-right">{item.stockQty}</td>
               <td className="px-4 py-3 text-right whitespace-nowrap">
                 <button
-                  className="px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 mr-2"
+                  className="px-3 py-1.5 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10 mr-2"
                   onClick={() => onEdit(item)}
                 >
                   Edit
                 </button>
                 <button
-                  className="px-3 py-1.5 rounded-md border border-white/20 hover:bg-white/10 text-red-400"
+                  className="px-3 py-1.5 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10 text-red-500 dark:text-red-400"
                   onClick={() => onDelete(item.id)}
                 >
                   Delete

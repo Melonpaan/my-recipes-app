@@ -116,7 +116,7 @@ export function ManageIngredientsModal({
                       type="number"
                       step="0.01"
                       min="0"
-                      className="w-24 px-2 py-1 border border-white/20 rounded-md bg-transparent text-center"
+                      className="w-24 px-2 py-1 border border-zinc-300 dark:border-white/20 rounded-md bg-white dark:bg-zinc-800 text-center"
                       value={item.quantity}
                       onChange={(e) => handleQuantityChange(index, e.target.value)}
                       placeholder="Qty"
@@ -140,7 +140,7 @@ export function ManageIngredientsModal({
           <h3 className="text-sm font-medium mb-2">Add Ingredient</h3>
           <div className="flex gap-2">
             <select
-              className="flex-1 px-3 py-2 border border-white/20 rounded-md bg-transparent"
+              className="flex-1 px-3 py-2 border border-zinc-300 dark:border-white/20 rounded-md bg-white dark:bg-zinc-800"
               value={selectedIngredientId}
               onChange={(e) => setSelectedIngredientId(e.target.value)}
             >
@@ -163,12 +163,12 @@ export function ManageIngredientsModal({
 
         {/* Actions */}
         <div className="flex justify-end gap-2">
-          <button
-            className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
+            <button
+              className="px-4 py-2 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10"
+              onClick={onCancel}
+            >
+              Cancel
+            </button>
           <button
             className="px-4 py-2 rounded-md bg-orange-600 text-white hover:bg-orange-500"
             onClick={handleSave}

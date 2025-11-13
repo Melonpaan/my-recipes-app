@@ -37,7 +37,7 @@ export function RecipeForm({
           <div className="col-span-2">
             <label className="block text-sm mb-1">Title *</label>
             <input
-              className="w-full border border-white/20 rounded-md px-3 py-2 bg-transparent"
+              className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.title}
               onChange={(e) => onFormChange({ ...form, title: e.target.value })}
               placeholder="My delicious recipe"
@@ -46,7 +46,7 @@ export function RecipeForm({
           <div className="col-span-2">
             <label className="block text-sm mb-1">Description</label>
             <textarea
-              className="w-full border border-white/20 rounded-md px-3 py-2 bg-transparent resize-none"
+              className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800 resize-none"
               rows={3}
               value={form.description}
               onChange={(e) => onFormChange({ ...form, description: e.target.value })}
@@ -56,7 +56,7 @@ export function RecipeForm({
           <div>
             <label className="block text-sm mb-1">Category *</label>
             <select
-              className="w-full border border-white/20 rounded-md px-3 py-2 bg-transparent"
+              className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.categoryId}
               onChange={(e) => onFormChange({ ...form, categoryId: e.target.value })}
             >
@@ -72,7 +72,7 @@ export function RecipeForm({
             <label className="block text-sm mb-1">Prep Time (minutes)</label>
             <input
               type="number"
-              className="w-full border border-white/20 rounded-md px-3 py-2 bg-transparent"
+              className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.prepTime ?? ''}
               onChange={(e) =>
                 onFormChange({ ...form, prepTime: e.target.value ? parseInt(e.target.value) : null })
@@ -84,7 +84,7 @@ export function RecipeForm({
           <div className="col-span-2">
             <label className="block text-sm mb-1">Difficulty</label>
             <select
-              className="w-full border border-white/20 rounded-md px-3 py-2 bg-transparent"
+              className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.difficulty ?? ''}
               onChange={(e) =>
                 onFormChange({
@@ -101,7 +101,7 @@ export function RecipeForm({
           </div>
           <div className="col-span-2 flex justify-end gap-2">
             <button
-              className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10"
+              className="px-4 py-2 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10"
               onClick={onCancel}
             >
               Cancel

@@ -5,9 +5,19 @@
 @theme {
   /* Custom font stack */
   --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  
-  /* Enable dark mode with class strategy (already default in v4) */
-  --color-scheme: light dark;
+}
+
+/* Tailwind v4: Force class-based dark mode ONLY (disable prefers-color-scheme) */
+/* stylelint-disable-next-line at-rule-no-unknown */
+@variant dark (.dark &);
+
+/* Set color-scheme for proper browser UI (scrollbars, form controls) */
+:root {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
 }
 
 /* Base styles */

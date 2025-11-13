@@ -38,7 +38,7 @@ export function IngredientForm({
           <div>
             <label className="block text-sm mb-1">Name</label>
             <input
-              className="w-full border border-white/20 rounded-md px-3 py-2 bg-transparent"
+              className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.name}
               onChange={(e) => onFormChange({ ...form, name: e.target.value })}
             />
@@ -46,7 +46,7 @@ export function IngredientForm({
           <div>
             <label className="block text-sm mb-1">Unit</label>
             <select
-              className="w-full border border-white/20 rounded-md px-3 py-2 bg-transparent"
+              className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.unitId}
               onChange={(e) => onFormChange({ ...form, unitId: e.target.value })}
             >
@@ -60,7 +60,7 @@ export function IngredientForm({
           <div>
             <label className="block text-sm mb-1">Stock qty</label>
             <input
-              className="w-full border border-white/20 rounded-md px-3 py-2 bg-transparent"
+              className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.stockQty}
               onChange={(e) => onFormChange({ ...form, stockQty: e.target.value })}
               placeholder="0 or 12.345"
@@ -69,7 +69,7 @@ export function IngredientForm({
         </div>
         <div className="mt-4 flex justify-end gap-2">
           <button
-            className="px-4 py-2 rounded-md border border-white/20 hover:bg-white/10"
+            className="px-4 py-2 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10"
             onClick={onCancel}
           >
             Cancel
