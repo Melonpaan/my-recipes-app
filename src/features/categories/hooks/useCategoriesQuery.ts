@@ -1,15 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../../ipc/api'
 import { useToast } from '../../../components/Toaster'
+import { getErrorMessage } from '../../../utils/errorUtils'
 import type { CategoryCreateRequest, CategoryUpdateRequest, CategoryDeleteRequest } from '../../../../shared/ipc'
-
-// Helper to extract clean error message from IPC errors
-function getErrorMessage(error: Error): string {
-  // IPC errors have format: "Error invoking remote method 'xxx': Error: actual message"
-  // We want to extract only the "actual message" part
-  const match = error.message.match(/Error:\s*(.+)$/)
-  return match ? match[1] : error.message
-}
 
 export function useCategoriesQuery() {
   return useQuery({

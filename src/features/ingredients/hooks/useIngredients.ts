@@ -7,6 +7,7 @@ import {
   useDeleteIngredient,
 } from './useIngredientsQuery'
 import { parseStockQty } from '../../../../shared/utils'
+import { isValidStockQuantity } from '../../../utils/validationUtils'
 import type { IngredientDTO } from '../../../../shared/ipc'
 import { useToast } from '../../../components/Toaster'
 
@@ -75,9 +76,9 @@ export function useIngredients() {
     // Basic UI validation
     const nameOk = form.name.trim().length > 0
     const unitOk = !!form.unitId
-    const stockOk = /^\d+(\.\d{1,3})?$/.test(form.stockQty)
+    const stockOk = isValidStockQuantity(form.stockQty)
     if (!nameOk || !unitOk || !stockOk) {
-      toast.error('Please fill valid values')
+      toast.error('Veuillez remplir des valeurs valides')
       return
     }
 

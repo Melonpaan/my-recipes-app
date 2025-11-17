@@ -1,13 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../../ipc/api'
 import { useToast } from '../../../components/Toaster'
+import { getErrorMessage } from '../../../utils/errorUtils'
 import type { RecipesCreateRequest, RecipesUpdateRequest, RecipesDeleteRequest, RecipeIngredientsSetRequest } from '../../../../shared/ipc'
-
-// Helper to extract clean error message from IPC errors
-function getErrorMessage(error: Error): string {
-  const match = error.message.match(/Error:\s*(.+)$/)
-  return match ? match[1] : error.message
-}
 
 export function useRecipesQuery(search?: string, categoryId?: string) {
   return useQuery({
