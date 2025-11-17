@@ -20,7 +20,7 @@ export async function updateIngredientUc(input: IngredientUpdateRequest): Promis
     return { ok: true }
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      throw AppError.conflict('Ingredient with same name and unit already exists')
+      throw AppError.conflict('Un ingrédient avec ce nom et cette unité existe déjà')
     }
     throw error
   }

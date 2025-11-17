@@ -39,7 +39,7 @@ export function useRecipes() {
   const toast = useToast()
 
   const recipes = useMemo(() => recipesData?.items ?? [], [recipesData])
-  const categories = useMemo(() => categoriesData?.items ?? [], [categoriesData])
+  const categories = useMemo(() => categoriesData ?? [], [categoriesData])
   const ingredients = useMemo(() => ingredientsData?.items ?? [], [ingredientsData])
   const units = useMemo(() => unitsData?.items ?? [], [unitsData])
   const loading = isLoadingRecipes || isLoadingCategories || isLoadingIngredients || isLoadingUnits

@@ -13,7 +13,7 @@ export async function deleteIngredientUc(input: IngredientDeleteRequest): Promis
     return { ok: true }
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
-      throw AppError.foreignKeyViolation('Cannot delete: ingredient is used by recipes')
+      throw AppError.foreignKeyViolation('Impossible de supprimer cet ingrédient : il est utilisé par des recettes')
     }
     throw error
   }

@@ -11,6 +11,10 @@ import {
   type UnitsListResponse,
   type CategoriesListRequest,
   type CategoriesListResponse,
+  type CategoryCreateRequest,
+  type CategoryCreateResponse,
+  type CategoryUpdateRequest,
+  type CategoryDeleteRequest,
   type RecipesListRequest,
   type RecipesListResponse,
   type RecipesGetRequest,
@@ -45,6 +49,12 @@ const api = {
   categories: {
     list: (req?: CategoriesListRequest) =>
       ipcRenderer.invoke(Channels.Categories_List, req) as Promise<CategoriesListResponse>,
+    create: (req: CategoryCreateRequest) =>
+      ipcRenderer.invoke(Channels.Categories_Create, req) as Promise<CategoryCreateResponse>,
+    update: (req: CategoryUpdateRequest) =>
+      ipcRenderer.invoke(Channels.Categories_Update, req) as Promise<{ ok: true }>,
+    delete: (req: CategoryDeleteRequest) =>
+      ipcRenderer.invoke(Channels.Categories_Delete, req) as Promise<{ ok: true }>,
   },
   recipes: {
     list: (req?: RecipesListRequest) =>

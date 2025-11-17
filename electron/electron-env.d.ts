@@ -32,6 +32,10 @@ type UnitsListRequest = import('../shared/ipc').UnitsListRequest
 type UnitsListResponse = import('../shared/ipc').UnitsListResponse
 type CategoriesListRequest = import('../shared/ipc').CategoriesListRequest
 type CategoriesListResponse = import('../shared/ipc').CategoriesListResponse
+type CategoryCreateRequest = import('../shared/ipc').CategoryCreateRequest
+type CategoryCreateResponse = import('../shared/ipc').CategoryCreateResponse
+type CategoryUpdateRequest = import('../shared/ipc').CategoryUpdateRequest
+type CategoryDeleteRequest = import('../shared/ipc').CategoryDeleteRequest
 type RecipesListRequest = import('../shared/ipc').RecipesListRequest
 type RecipesListResponse = import('../shared/ipc').RecipesListResponse
 type RecipesGetRequest = import('../shared/ipc').RecipesGetRequest
@@ -58,6 +62,9 @@ interface Window {
     }
     categories: {
       list(req?: CategoriesListRequest): Promise<CategoriesListResponse>
+      create(req: CategoryCreateRequest): Promise<CategoryCreateResponse>
+      update(req: CategoryUpdateRequest): Promise<{ ok: true }>
+      delete(req: CategoryDeleteRequest): Promise<{ ok: true }>
     }
     recipes: {
       list(req?: RecipesListRequest): Promise<RecipesListResponse>

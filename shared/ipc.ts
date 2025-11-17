@@ -14,6 +14,9 @@ export const Channels = {
   Ingredients_Delete: 'ingredients:delete',
   Units_List: 'units:list',
   Categories_List: 'categories:list',
+  Categories_Create: 'categories:create',
+  Categories_Update: 'categories:update',
+  Categories_Delete: 'categories:delete',
   Ingredients_Usage: 'ingredients:usage',
 } as const
 
@@ -161,6 +164,15 @@ export interface CategoriesListResponse {
   page: number
   pageSize: number
 }
+export interface CategoryCreateRequest {
+  name: string
+}
+export interface CategoryCreateResponse { id: string }
+export interface CategoryUpdateRequest {
+  id: string
+  name: string
+}
+export interface CategoryDeleteRequest { id: string }
 
 // Optional typed mapping for invoke patterns
 export interface InvokeContracts {
@@ -180,6 +192,9 @@ export interface InvokeContracts {
   [Channels.Units_List]: { request: UnitsListRequest; response: UnitsListResponse }
   [Channels.Ingredients_Usage]: { request: IngredientUsageRequest; response: IngredientUsageResponse }
   [Channels.Categories_List]: { request: CategoriesListRequest; response: CategoriesListResponse }
+  [Channels.Categories_Create]: { request: CategoryCreateRequest; response: CategoryCreateResponse }
+  [Channels.Categories_Update]: { request: CategoryUpdateRequest; response: { ok: true } }
+  [Channels.Categories_Delete]: { request: CategoryDeleteRequest; response: { ok: true } }
 }
 
 

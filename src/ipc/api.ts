@@ -11,6 +11,10 @@ import type {
   UnitsListResponse,
   CategoriesListRequest,
   CategoriesListResponse,
+  CategoryCreateRequest,
+  CategoryCreateResponse,
+  CategoryUpdateRequest,
+  CategoryDeleteRequest,
   RecipesListRequest,
   RecipesListResponse,
   RecipesGetRequest,
@@ -35,6 +39,9 @@ export const api = {
   },
   categories: {
     list: (req?: CategoriesListRequest) => window.api.categories.list(req) as Promise<CategoriesListResponse>,
+    create: (req: CategoryCreateRequest) => window.api.categories.create(req) as Promise<CategoryCreateResponse>,
+    update: (req: CategoryUpdateRequest) => window.api.categories.update(req) as Promise<{ ok: true }>,
+    delete: (req: CategoryDeleteRequest) => window.api.categories.delete(req) as Promise<{ ok: true }>,
   },
   recipes: {
     list: (req?: RecipesListRequest) => window.api.recipes.list(req) as Promise<RecipesListResponse>,

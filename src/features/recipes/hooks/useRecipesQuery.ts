@@ -3,10 +3,17 @@ import { api } from '../../../ipc/api'
 import { useToast } from '../../../components/Toaster'
 import type { RecipesCreateRequest, RecipesUpdateRequest, RecipesDeleteRequest, RecipeIngredientsSetRequest } from '../../../../shared/ipc'
 
+// Helper to extract clean error message from IPC errors
+function getErrorMessage(error: Error): string {
+  const match = error.message.match(/Error:\s*(.+)$/)
+  return match ? match[1] : error.message
+}
+
 export function useRecipesQuery(search?: string, categoryId?: string) {
   return useQuery({
-    queryKey: ['recipes', search, categoryId],
+    queryKey: ['recipes', search || '', categoryId || ''],
     queryFn: () => api.recipes.list({ page: 1, pageSize: 50, search, categoryId }),
+    refetchOnMount: true,
   })
 }
 
@@ -21,8 +28,12 @@ export function useRecipeQuery(id: string | null) {
 export function useCategoriesQuery() {
   return useQuery({
     queryKey: ['categories'],
-    queryFn: () => api.categories.list({ page: 1, pageSize: 100 }),
+    queryFn: async () => {
+      const res = await api.categories.list({ page: 1, pageSize: 100 })
+      return res.items
+    },
     staleTime: 1000 * 60 * 10, // 10 minutes - categories change rarely
+    refetchOnMount: true,
   })
 }
 
@@ -34,10 +45,10 @@ export function useCreateRecipe() {
     mutationFn: (data: RecipesCreateRequest) => api.recipes.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recipes'] })
-      toast.success('Recipe created successfully')
+      toast.success('Recette créée avec succès')
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to create recipe')
+      toast.error(getErrorMessage(error))
     },
   })
 }
@@ -49,9 +60,9 @@ export function useUpdateRecipe() {
     mutationFn: (data: RecipesUpdateRequest) => api.recipes.update(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recipes'] })
-      toast.success('Recipe updated')
+      toast.success('Recette modifiée avec succès')
     },
-    onError: (error: Error) => toast.error(error.message || 'Failed to update recipe'),
+    onError: (error: Error) => toast.error(getErrorMessage(error)),
   })
 }
 
@@ -62,9 +73,9 @@ export function useDeleteRecipe() {
     mutationFn: (data: RecipesDeleteRequest) => api.recipes.delete(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recipes'] })
-      toast.success('Recipe deleted')
+      toast.success('Recette supprimée avec succès')
     },
-    onError: (error: Error) => toast.error(error.message || 'Failed to delete recipe'),
+    onError: (error: Error) => toast.error(getErrorMessage(error)),
   })
 }
 
@@ -76,9 +87,9 @@ export function useSetRecipeIngredients() {
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['recipes'] })
       queryClient.invalidateQueries({ queryKey: ['recipe', variables.recipeId] })
-      toast.success('Ingredients updated')
+      toast.success('Ingrédients mis à jour avec succès')
     },
-    onError: (error: Error) => toast.error(error.message || 'Failed to update ingredients'),
+    onError: (error: Error) => toast.error(getErrorMessage(error)),
   })
 }
 

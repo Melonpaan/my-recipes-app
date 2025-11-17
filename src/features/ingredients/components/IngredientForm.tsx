@@ -63,7 +63,7 @@ export function IngredientForm({
               className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.stockQty}
               onChange={(e) => onFormChange({ ...form, stockQty: e.target.value })}
-              placeholder="0 or 12.345"
+              placeholder="ex: 500 ou 1.5"
             />
           </div>
         </div>

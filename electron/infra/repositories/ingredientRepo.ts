@@ -44,13 +44,38 @@ export async function createIngredient(data: { name: string; unitId: string; sto
 }
 
 export async function updateIngredient(data: { id: string; name?: string; unitId?: string; stockQty?: number }) {
+  // Récupérer l'ingrédient actuel pour vérifier les changements
+  const current = await prisma.ingredients.findUnique({
+    where: { id_ingredient: BigInt(data.id) },
+  })
+
+  if (!current) return
+
+  // Vérifier si name et unitId ont changé (contrainte unique sur [name, unitId])
+  const nameChanged = data.name !== undefined && data.name !== current.name
+  const unitChanged = data.unitId !== undefined && data.unitId !== current.id_unit.toString()
+  const stockChanged = data.stockQty !== undefined && data.stockQty.toString() !== current.stock_qty.toString()
+
+  // Si rien n'a changé, ne rien faire
+  if (!nameChanged && !unitChanged && !stockChanged) {
+    return
+  }
+
+  // Construire l'objet data avec seulement les champs qui ont changé
+  const updateData: {
+    name?: string
+    id_unit?: bigint
+    stock_qty?: string
+  } = {}
+
+  if (nameChanged) updateData.name = data.name
+  if (unitChanged) updateData.id_unit = BigInt(data.unitId!)
+  if (stockChanged) updateData.stock_qty = data.stockQty!.toString()
+
+  // Mettre à jour
   await prisma.ingredients.update({
     where: { id_ingredient: BigInt(data.id) },
-    data: {
-      ...(data.name !== undefined ? { name: data.name } : {}),
-      ...(data.unitId !== undefined ? { id_unit: BigInt(data.unitId) } : {}),
-      ...(data.stockQty !== undefined ? { stock_qty: data.stockQty.toString() } : {}),
-    },
+    data: updateData,
   })
 }
 

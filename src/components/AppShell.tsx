@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export function AppShell({ tab, onTab }: { tab: 'recipes' | 'ingredients'; onTab: (t: 'recipes' | 'ingredients') => void }) {
+export function AppShell({ tab, onTab }: { tab: 'recipes' | 'ingredients' | 'categories'; onTab: (t: 'recipes' | 'ingredients' | 'categories') => void }) {
   const [isDark, setIsDark] = useState(true)
 
   useEffect(() => {
@@ -49,6 +49,16 @@ export function AppShell({ tab, onTab }: { tab: 'recipes' | 'ingredients'; onTab
             onClick={() => onTab('ingredients')}
           >
             Ingredients
+          </button>
+          <button
+            className={`px-4 py-2 rounded-lg transition-all font-medium ${
+              tab === 'categories' 
+                ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' 
+                : 'border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-900 dark:text-white'
+            }`}
+            onClick={() => onTab('categories')}
+          >
+            Categories
           </button>
         </nav>
         <button
