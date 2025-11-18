@@ -42,22 +42,29 @@ Application desktop de gestion de recettes et d'ingrédients développée avec E
 ## Installation
 
 ```bash
-# Installer les dépendances
+# 1. Cloner le dépôt
+git clone <url-du-repo>
+cd my-recipes-app
+
+# 2. Installer les dépendances
 npm install
 
-# Configurer la base de données
+# 3. Configurer la base de données
 cp .env.example .env
 # Éditer .env avec vos informations MySQL
+# Exemple: DATABASE_URL="mysql://user:password@localhost:3306/recipes_app"
 
-# Ajouter les unités de mesure par défaut
+# 4. Créer les tables dans la base de données
+npx prisma migrate dev --name init
+
+# 5. Ajouter les unités de mesure par défaut
 npm run db:seed
 
-# Générer le client Prisma
-npx prisma generate
-
-# Lancer l'application
+# 6. Lancer l'application
 npm run dev
 ```
+
+**Note** : La commande `npx prisma migrate dev` crée automatiquement la base de données et toutes les tables depuis le schéma Prisma. Vous n'avez pas besoin d'exécuter de script SQL manuellement.
 
 ## Scripts
 
