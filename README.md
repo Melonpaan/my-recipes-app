@@ -2,6 +2,37 @@
 
 Application desktop de gestion de recettes et d'ingrédients développée avec Electron, React, TypeScript et Prisma.
 
+## Fonctionnalités
+
+### Gestion des Ingrédients
+- CRUD complet (Create, Read, Update, Delete)
+- Recherche par nom avec debouncing
+- Unités de mesure françaises (g, kg, ml, L, c. à soupe, c. à café, pincée, etc.)
+- Gestion du stock avec quantités décimales (max 3 décimales)
+- Validation des doublons (nom + unité)
+- Protection contre la suppression (si utilisé dans une recette)
+
+### Gestion des Catégories
+- CRUD complet (Create, Read, Update, Delete)
+- Recherche par nom (filtrage client-side)
+- Validation des doublons (nom unique)
+- Protection contre la suppression (si utilisée par des recettes)
+
+### Gestion des Recettes
+- CRUD complet (Create, Read, Update, Delete)
+- Informations : titre, description, temps de préparation, difficulté
+- Association à une catégorie
+- Composition : ajout/suppression d'ingrédients avec quantités personnalisées
+- Modal de gestion des ingrédients par recette
+- Affichage des catégories dans le tableau
+
+### Interface Utilisateur
+- Dark mode / Light mode avec toggle persistant
+- Design moderne avec Tailwind CSS v4
+- Toasts de notification pour les actions CRUD
+- Messages d'erreur clairs en français
+- Interface responsive et intuitive
+
 ## Prérequis
 
 - Node.js 18+ (recommandé 20+)
@@ -47,7 +78,10 @@ my-recipes-app/
 │   │       ├── recipes/
 │   │       │   ├── listRecipes.ts
 │   │       │   ├── getRecipe.ts
-│   │       │   └── createRecipe.ts
+│   │       │   ├── createRecipe.ts
+│   │       │   ├── updateRecipe.ts
+│   │       │   ├── deleteRecipe.ts
+│   │       │   └── setRecipeIngredients.ts
 │   │       ├── ingredients/
 │   │       │   ├── listIngredients.ts
 │   │       │   ├── createIngredient.ts
@@ -57,7 +91,10 @@ my-recipes-app/
 │   │       ├── units/
 │   │       │   └── listUnits.ts
 │   │       └── categories/
-│   │           └── listCategories.ts
+│   │           ├── listCategories.ts
+│   │           ├── createCategory.ts
+│   │           ├── updateCategory.ts
+│   │           └── deleteCategory.ts
 │   ├── infra/
 │   │   └── repositories/           # Accès aux données
 │   │       ├── recipeRepo.ts
@@ -65,7 +102,7 @@ my-recipes-app/
 │   │       ├── unitRepo.ts
 │   │       └── categoryRepo.ts
 │   ├── ipc/
-│   │   └── registerHandlers.ts    # Enregistrement handlers IPC
+│   │   └── registerHandlers.ts    # Enregistrement handlers IPC + wrapHandler
 │   ├── db/
 │   │   └── prisma.ts              # Client Prisma
 │   ├── main/
@@ -85,6 +122,16 @@ my-recipes-app/
 │   │   │       ├── IngredientsFilters.tsx
 │   │   │       ├── IngredientsTable.tsx
 │   │   │       └── IngredientForm.tsx
+│   │   ├── categories/
+│   │   │   ├── CategoriesPage.tsx
+│   │   │   ├── hooks/
+│   │   │   │   ├── useCategories.ts
+│   │   │   │   └── useCategoriesQuery.ts
+│   │   │   └── components/
+│   │   │       ├── index.ts
+│   │   │       ├── CategoriesFilters.tsx
+│   │   │       ├── CategoriesTable.tsx
+│   │   │       └── CategoryForm.tsx
 │   │   └── recipes/
 │   │       ├── RecipesPage.tsx
 │   │       ├── hooks/
@@ -92,10 +139,15 @@ my-recipes-app/
 │   │       │   └── useRecipesQuery.ts
 │   │       └── components/
 │   │           ├── index.ts
-│   │           └── RecipeForm.tsx
+│   │           ├── RecipeForm.tsx
+│   │           ├── RecipesTable.tsx
+│   │           └── ManageIngredientsModal.tsx
 │   ├── components/                 # Composants partagés
-│   │   ├── AppShell.tsx
-│   │   └── Toaster.tsx
+│   │   ├── AppShell.tsx           # Header + navigation + theme toggle
+│   │   └── Toaster.tsx            # Système de notifications
+│   ├── utils/                      # Utilitaires
+│   │   ├── errorUtils.ts          # Extraction messages d'erreur IPC
+│   │   └── validationUtils.ts     # Validation stock (sans regex)
 │   ├── ipc/
 │   │   └── api.ts                 # Wrapper window.api
 │   ├── lib/
@@ -137,17 +189,20 @@ my-recipes-app/
 
 ### Backend (Clean Architecture)
 
-- **Use Cases** : Validation (Zod) + logique métier
+- **Use Cases** : Validation (Zod) + logique métier + gestion d'erreurs
 - **Repositories** : Accès aux données via Prisma
-- **AppError** : Gestion d'erreurs unifiée
-- **Types stricts** : Pas de `any`, utilisation de `Prisma.XWhereInput`
+- **AppError** : Gestion d'erreurs unifiée avec codes HTTP
+- **IPC Handlers** : `wrapHandler` pour sérialisation des erreurs
+- **Types stricts** : Utilisation de `Prisma.XWhereInput`
+- **Transactions atomiques** : `prisma.$transaction` pour les opérations complexes
 
 ### Frontend (Feature-Based)
 
 - **Hooks personnalisés** : Séparation logique/présentation
-- **React Query** : Cache et state management
+- **React Query** : Cache, mutations et state management
 - **Composants atomiques** : Réutilisables avec props typées
-- **Feature folders** : Organisation par domaine métier
+- **Feature folders** : Organisation par domaine métier (ingredients, categories, recipes)
+- **Utils partagés** : Fonctions lisibles et documentées
 
 ## Sécurité Electron
 
@@ -155,4 +210,5 @@ my-recipes-app/
 - Node Integration : `false`
 - Sandbox : `true`
 - IPC typé via `shared/ipc.ts`
+- Pas d'accès direct à Node.js depuis le renderer
 
