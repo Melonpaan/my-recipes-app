@@ -1,12 +1,17 @@
 import { useMemo, useState } from 'react'
 import { useCategoriesQuery, useCreateCategory, useUpdateCategory, useDeleteCategory } from './useCategoriesQuery'
 import type { CategoryDTO } from '../../../../shared/ipc'
+import { useSearch } from '../../../hooks/useSearch'
 
 type FormData = { id?: string; name: string }
 type FormMode = 'create' | 'edit'
 
 export function useCategories() {
-  const [search, setSearch] = useState('')
+  // Search sans debouncing (client-side filtering)
+  const { search, handleSearchChange, handleSearchSubmit, handleSearchReset } = useSearch({ 
+    useDebounce: false 
+  })
+
   const [formOpen, setFormOpen] = useState(false)
   const [formMode, setFormMode] = useState<FormMode>('create')
   const [form, setForm] = useState<FormData>({ name: '' })
@@ -62,18 +67,6 @@ export function useCategories() {
         { onSuccess: () => setFormOpen(false) }
       )
     }
-  }
-
-  function handleSearchChange(value: string) {
-    setSearch(value)
-  }
-
-  function handleSearchSubmit() {
-    // No debouncing for categories (client-side filtering)
-  }
-
-  function handleSearchReset() {
-    setSearch('')
   }
 
   return {

@@ -7,7 +7,12 @@ import type { RecipesCreateRequest, RecipesUpdateRequest, RecipesDeleteRequest, 
 export function useRecipesQuery(search?: string, categoryId?: string) {
   return useQuery({
     queryKey: ['recipes', search || '', categoryId || ''],
-    queryFn: () => api.recipes.list({ page: 1, pageSize: 50, search, categoryId }),
+    queryFn: () => api.recipes.list({ 
+      page: 1, 
+      pageSize: 50, 
+      search: search || undefined,
+      categoryId: categoryId || undefined
+    }),
     refetchOnMount: true,
   })
 }

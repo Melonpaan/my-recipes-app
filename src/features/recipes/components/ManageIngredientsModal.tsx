@@ -72,7 +72,7 @@ export function ManageIngredientsModal({
     })
 
     if (!valid) {
-      alert('All quantities must be valid positive numbers')
+      alert('Toutes les quantités doivent être des nombres positifs valides')
       return
     }
 
@@ -90,17 +90,17 @@ export function ManageIngredientsModal({
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-zinc-900 w-full max-w-3xl rounded-xl shadow-lg p-6 max-h-[80vh] overflow-auto">
-        <h2 className="text-xl font-semibold mb-1">Manage Ingredients</h2>
+        <h2 className="text-xl font-semibold mb-1">Gérer les ingrédients</h2>
         <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-5">
-          Recipe: <span className="font-medium">{recipeTitle}</span>
+          Recette : <span className="font-medium">{recipeTitle}</span>
         </p>
 
         {/* Liste des ingrédients */}
         <div className="mb-4">
-          <h3 className="text-sm font-medium mb-2">Ingredients List</h3>
+          <h3 className="text-sm font-medium mb-2">Liste des ingrédients</h3>
           {items.length === 0 ? (
             <p className="text-sm text-zinc-500 dark:text-zinc-400 py-4 text-center border border-dashed border-white/20 rounded-md">
-              No ingredients yet. Add one below.
+              Aucun ingrédient pour le moment. Ajoutez-en un ci-dessous.
             </p>
           ) : (
             <div className="space-y-2">
@@ -110,7 +110,7 @@ export function ManageIngredientsModal({
                 return (
                   <div key={index} className="flex items-center gap-3 p-3 border border-white/20 rounded-md">
                     <div className="flex-1">
-                      <span className="font-medium">{ingredient?.name ?? 'Unknown'}</span>
+                      <span className="font-medium">{ingredient?.name ?? 'Inconnu'}</span>
                     </div>
                     <input
                       type="number"
@@ -119,14 +119,14 @@ export function ManageIngredientsModal({
                       className="w-24 px-2 py-1 border border-zinc-300 dark:border-white/20 rounded-md bg-white dark:bg-zinc-800 text-center"
                       value={item.quantity}
                       onChange={(e) => handleQuantityChange(index, e.target.value)}
-                      placeholder="Qty"
+                      placeholder="Qté"
                     />
                     <span className="text-sm text-zinc-500 dark:text-zinc-400 w-10">{unitCode}</span>
                     <button
                       className="px-3 py-1 text-sm rounded-md border border-red-500/50 text-red-500 hover:bg-red-500/10"
                       onClick={() => handleRemove(index)}
                     >
-                      Remove
+                      Retirer
                     </button>
                   </div>
                 )
@@ -137,14 +137,14 @@ export function ManageIngredientsModal({
 
         {/* Ajouter un ingrédient */}
         <div className="mb-6 p-4 border border-white/20 rounded-md bg-zinc-50 dark:bg-zinc-800/50">
-          <h3 className="text-sm font-medium mb-2">Add Ingredient</h3>
+          <h3 className="text-sm font-medium mb-2">Ajouter un ingrédient</h3>
           <div className="flex gap-2">
             <select
               className="flex-1 px-3 py-2 border border-zinc-300 dark:border-white/20 rounded-md bg-white dark:bg-zinc-800"
               value={selectedIngredientId}
               onChange={(e) => setSelectedIngredientId(e.target.value)}
             >
-              <option value="">Select an ingredient...</option>
+              <option value="">Sélectionnez un ingrédient...</option>
               {availableOptions.map((ing) => (
                 <option key={ing.id} value={ing.id}>
                   {ing.name} ({unitIdToCode.get(ing.unitId)})
@@ -156,7 +156,7 @@ export function ManageIngredientsModal({
               onClick={handleAdd}
               disabled={!selectedIngredientId}
             >
-              + Add
+              + Ajouter
             </button>
           </div>
         </div>
@@ -167,13 +167,13 @@ export function ManageIngredientsModal({
               className="px-4 py-2 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10"
               onClick={onCancel}
             >
-              Cancel
+              Annuler
             </button>
           <button
             className="px-4 py-2 rounded-md bg-orange-600 text-white hover:bg-orange-500"
             onClick={handleSave}
           >
-            Save Ingredients
+            Enregistrer les ingrédients
           </button>
         </div>
       </div>

@@ -12,7 +12,7 @@ export function CategoriesTable({ items, onEdit, onDelete }: Props) {
       <table className="min-w-full text-sm">
         <thead className="bg-white/10">
           <tr>
-            <th className="px-4 py-3 text-left text-zinc-700 dark:text-zinc-300">Name</th>
+            <th className="px-4 py-3 text-left text-zinc-700 dark:text-zinc-300">Nom</th>
             <th className="px-4 py-3 text-right text-zinc-700 dark:text-zinc-300">Actions</th>
           </tr>
         </thead>
@@ -20,7 +20,7 @@ export function CategoriesTable({ items, onEdit, onDelete }: Props) {
           {items.length === 0 && (
             <tr>
               <td className="px-4 py-8 text-center text-zinc-600 dark:text-zinc-400" colSpan={2}>
-                No categories found
+                Aucune catégorie trouvée
               </td>
             </tr>
           )}
@@ -32,13 +32,13 @@ export function CategoriesTable({ items, onEdit, onDelete }: Props) {
                   className="px-3 py-1.5 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-900 dark:text-white mr-2 transition-colors"
                   onClick={() => onEdit(item)}
                 >
-                  Edit
+                  Modifier
                 </button>
                 <button
                   className="px-3 py-1.5 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10 text-red-600 dark:text-red-400 transition-colors"
                   onClick={() => onDelete(item.id)}
                 >
-                  Delete
+                  Supprimer
                 </button>
               </td>
             </tr>

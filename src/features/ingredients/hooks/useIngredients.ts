@@ -10,13 +10,17 @@ import { parseStockQty } from '../../../../shared/utils'
 import { isValidStockQuantity } from '../../../utils/validationUtils'
 import type { IngredientDTO } from '../../../../shared/ipc'
 import { useToast } from '../../../components/Toaster'
+import { useSearch } from '../../../hooks/useSearch'
 
 type FormData = { id?: string; name: string; unitId: string; stockQty: string }
 type FormMode = 'create' | 'edit'
 
 export function useIngredients() {
-  const [search, setSearch] = useState('')
-  const [debouncedSearch, setDebouncedSearch] = useState('')
+  // Search avec debouncing (server-side)
+  const { search, debouncedSearch, handleSearchChange, handleSearchSubmit, handleSearchReset } = useSearch({ 
+    useDebounce: true 
+  })
+
   const [formOpen, setFormOpen] = useState(false)
   const [formMode, setFormMode] = useState<FormMode>('create')
   const [form, setForm] = useState<FormData>({
@@ -93,19 +97,6 @@ export function useIngredients() {
         { onSuccess: () => setFormOpen(false) }
       )
     }
-  }
-
-  function handleSearchChange(value: string) {
-    setSearch(value)
-  }
-
-  function handleSearchSubmit() {
-    setDebouncedSearch(search)
-  }
-
-  function handleSearchReset() {
-    setSearch('')
-    setDebouncedSearch('')
   }
 
   return {

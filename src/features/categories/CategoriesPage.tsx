@@ -1,5 +1,6 @@
 import { useCategories } from './hooks/useCategories'
-import { CategoriesFilters, CategoriesTable, CategoryForm } from './components'
+import { CategoriesTable, CategoryForm } from './components'
+import { SearchFilters } from '../../components/SearchFilters'
 
 export function CategoriesPage() {
   const {
@@ -23,7 +24,7 @@ export function CategoriesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-zinc-600 dark:text-zinc-400">Loading categories...</p>
+        <p className="text-zinc-600 dark:text-zinc-400">Chargement des catégories...</p>
       </div>
     )
   }
@@ -32,17 +33,19 @@ export function CategoriesPage() {
     <div className="px-6 py-10 max-w-7xl mx-auto">
       <div className="mb-10">
         <h1 className="text-4xl font-bold mb-2 bg-linear-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
-          Categories
+          Catégories
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">Organize your recipes by category</p>
+        <p className="text-zinc-600 dark:text-zinc-400">Organisez vos recettes par catégorie</p>
       </div>
 
-      <CategoriesFilters
+      <SearchFilters
         search={search}
         onSearchChange={handleSearchChange}
         onSearchSubmit={handleSearchSubmit}
         onSearchReset={handleSearchReset}
         onNewClick={openCreateForm}
+        placeholder="Rechercher une catégorie…"
+        newButtonLabel="+ Nouvelle catégorie"
       />
 
       <CategoriesTable

@@ -1,5 +1,6 @@
 import { useIngredients } from './hooks/useIngredients'
-import { IngredientsFilters, IngredientsTable, IngredientForm } from './components'
+import { IngredientsTable, IngredientForm } from './components'
+import { SearchFilters } from '../../components/SearchFilters'
 
 export function IngredientsPage() {
   const {
@@ -24,7 +25,7 @@ export function IngredientsPage() {
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-lg text-zinc-500 dark:text-zinc-400">Loading…</div>
+      <div className="text-lg text-zinc-500 dark:text-zinc-400">Chargement…</div>
     </div>
   )
 
@@ -32,17 +33,19 @@ export function IngredientsPage() {
     <div className="px-6 py-10 max-w-7xl mx-auto">
       <div className="mb-10">
         <h1 className="text-4xl font-bold mb-2 bg-linear-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
-          Ingredients
+          Ingrédients
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">Manage your kitchen inventory</p>
+        <p className="text-zinc-600 dark:text-zinc-400">Gérez votre inventaire de cuisine</p>
       </div>
 
-      <IngredientsFilters
+      <SearchFilters
         search={search}
         onSearchChange={handleSearchChange}
         onSearchSubmit={handleSearchSubmit}
         onSearchReset={handleSearchReset}
         onNewClick={openCreateForm}
+        placeholder="Rechercher un ingrédient…"
+        newButtonLabel="+ Nouvel ingrédient"
       />
 
       <IngredientsTable

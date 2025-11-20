@@ -13,8 +13,8 @@ export function IngredientsTable({ items, unitIdToCode, onEdit, onDelete }: Ingr
       <table className="min-w-full text-sm">
         <thead className="bg-white/10">
           <tr>
-            <th className="px-4 py-3 text-left">Name</th>
-            <th className="px-4 py-3 text-left">Unit</th>
+            <th className="px-4 py-3 text-left">Nom</th>
+            <th className="px-4 py-3 text-left">Unité</th>
             <th className="px-4 py-3 text-right">Stock</th>
             <th className="px-4 py-3 text-right">Actions</th>
           </tr>
@@ -23,7 +23,7 @@ export function IngredientsTable({ items, unitIdToCode, onEdit, onDelete }: Ingr
           {items.length === 0 && (
             <tr>
               <td className="px-4 py-8 text-center" colSpan={4}>
-                No ingredients
+                Aucun ingrédient
               </td>
             </tr>
           )}
@@ -37,13 +37,13 @@ export function IngredientsTable({ items, unitIdToCode, onEdit, onDelete }: Ingr
                   className="px-3 py-1.5 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10 mr-2"
                   onClick={() => onEdit(item)}
                 >
-                  Edit
+                  Modifier
                 </button>
                 <button
                   className="px-3 py-1.5 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10 text-red-500 dark:text-red-400"
                   onClick={() => onDelete(item.id)}
                 >
-                  Delete
+                  Supprimer
                 </button>
               </td>
             </tr>

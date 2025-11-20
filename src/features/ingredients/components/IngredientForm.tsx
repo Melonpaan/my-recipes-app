@@ -32,11 +32,11 @@ export function IngredientForm({
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white text-black dark:bg-zinc-900 dark:text-white w-full max-w-md rounded-xl shadow-lg p-5">
         <h2 className="text-lg font-semibold mb-3">
-          {mode === 'create' ? 'New Ingredient' : 'Edit Ingredient'}
+          {mode === 'create' ? 'Nouvel ingrédient' : 'Modifier l\'ingrédient'}
         </h2>
         <div className="space-y-3">
           <div>
-            <label className="block text-sm mb-1">Name</label>
+            <label className="block text-sm mb-1">Nom</label>
             <input
               className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.name}
@@ -44,7 +44,7 @@ export function IngredientForm({
             />
           </div>
           <div>
-            <label className="block text-sm mb-1">Unit</label>
+            <label className="block text-sm mb-1">Unité</label>
             <select
               className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.unitId}
@@ -58,7 +58,7 @@ export function IngredientForm({
             </select>
           </div>
           <div>
-            <label className="block text-sm mb-1">Stock qty</label>
+            <label className="block text-sm mb-1">Quantité en stock</label>
             <input
               className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.stockQty}
@@ -72,13 +72,13 @@ export function IngredientForm({
             className="px-4 py-2 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10"
             onClick={onCancel}
           >
-            Cancel
+            Annuler
           </button>
           <button
             className="px-4 py-2 rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-500"
             onClick={onSubmit}
           >
-            {mode === 'create' ? 'Create' : 'Save'}
+            {mode === 'create' ? 'Créer' : 'Enregistrer'}
           </button>
         </div>
       </div>

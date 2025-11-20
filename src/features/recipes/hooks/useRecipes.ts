@@ -3,6 +3,7 @@ import { useRecipesQuery, useRecipeQuery, useCreateRecipe, useUpdateRecipe, useD
 import { useCategoriesQuery } from '../../categories/hooks/useCategoriesQuery'
 import { useIngredientsQuery, useUnitsQuery } from '../../ingredients/hooks/useIngredientsQuery'
 import { useToast } from '../../../components/Toaster'
+import { useSearch } from '../../../hooks/useSearch'
 
 type FormData = {
   title: string
@@ -13,6 +14,14 @@ type FormData = {
 }
 
 export function useRecipes() {
+  // Search avec debouncing (server-side)
+  const { search, debouncedSearch, handleSearchChange, handleSearchSubmit, handleSearchReset: baseSearchReset } = useSearch({ 
+    useDebounce: true 
+  })
+
+  // Category filter
+  const [categoryFilter, setCategoryFilter] = useState('')
+
   const [formOpen, setFormOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState<FormData>({
@@ -27,8 +36,8 @@ export function useRecipes() {
   const [ingredientsModalOpen, setIngredientsModalOpen] = useState(false)
   const [managingRecipeId, setManagingRecipeId] = useState<string | null>(null)
 
-  // React Query hooks
-  const { data: recipesData, isLoading: isLoadingRecipes } = useRecipesQuery()
+  // React Query hooks with search and category filter
+  const { data: recipesData, isLoading: isLoadingRecipes } = useRecipesQuery(debouncedSearch, categoryFilter)
   const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery()
   const { data: ingredientsData, isLoading: isLoadingIngredients } = useIngredientsQuery()
   const { data: unitsData, isLoading: isLoadingUnits } = useUnitsQuery()
@@ -71,13 +80,13 @@ export function useRecipes() {
   function handleSubmit() {
     // Basic validation
     if (!form.title.trim()) {
-      toast.error('Title is required')
+      toast.error('Le titre est requis')
       return
     }
 
     const categoryId = form.categoryId || categories[0]?.id
     if (!categoryId) {
-      toast.error('Please select a category')
+      toast.error('Veuillez sélectionner une catégorie')
       return
     }
 
@@ -116,12 +125,12 @@ export function useRecipes() {
 
   function handleUpdate(id: string) {
     if (!form.title.trim()) {
-      toast.error('Title is required')
+      toast.error('Le titre est requis')
       return
     }
     const categoryId = form.categoryId || categories[0]?.id
     if (!categoryId) {
-      toast.error('Please select a category')
+      toast.error('Veuillez sélectionner une catégorie')
       return
     }
     updateMutation.mutate({
@@ -155,6 +164,15 @@ export function useRecipes() {
     )
   }
 
+  function handleCategoryChange(value: string) {
+    setCategoryFilter(value)
+  }
+
+  function handleSearchReset() {
+    baseSearchReset()
+    setCategoryFilter('')
+  }
+
   return {
     // State
     recipes,
@@ -168,6 +186,8 @@ export function useRecipes() {
     editingId,
     ingredientsModalOpen,
     managingRecipe,
+    search,
+    categoryFilter,
 
     // Actions
     setForm,
@@ -181,6 +201,10 @@ export function useRecipes() {
     handleManageIngredients,
     closeIngredientsModal,
     handleSaveIngredients,
+    handleSearchChange,
+    handleSearchSubmit,
+    handleSearchReset,
+    handleCategoryChange,
   }
 }
 

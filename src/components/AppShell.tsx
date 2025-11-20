@@ -38,7 +38,7 @@ export function AppShell({ tab, onTab }: { tab: 'recipes' | 'ingredients' | 'cat
             }`}
             onClick={() => onTab('recipes')}
           >
-            Recipes
+            Recettes
           </button>
           <button
             className={`px-4 py-2 rounded-lg transition-all font-medium ${
@@ -48,7 +48,7 @@ export function AppShell({ tab, onTab }: { tab: 'recipes' | 'ingredients' | 'cat
             }`}
             onClick={() => onTab('ingredients')}
           >
-            Ingredients
+            Ingrédients
           </button>
           <button
             className={`px-4 py-2 rounded-lg transition-all font-medium ${
@@ -58,11 +58,11 @@ export function AppShell({ tab, onTab }: { tab: 'recipes' | 'ingredients' | 'cat
             }`}
             onClick={() => onTab('categories')}
           >
-            Categories
+            Catégories
           </button>
         </nav>
         <button
-          aria-label="Toggle theme"
+          aria-label="Changer le thème"
           className="p-2 rounded-lg border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10 transition-colors"
           onClick={toggleTheme}
         >

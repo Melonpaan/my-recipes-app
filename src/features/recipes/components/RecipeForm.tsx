@@ -32,15 +32,15 @@ export function RecipeForm({
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white text-black dark:bg-zinc-900 dark:text-white w-full max-w-2xl rounded-xl shadow-lg p-5">
-        <h2 className="text-lg font-semibold mb-3">{isEdit ? 'Edit Recipe' : 'Create New Recipe'}</h2>
+        <h2 className="text-lg font-semibold mb-3">{isEdit ? 'Modifier la recette' : 'Créer une nouvelle recette'}</h2>
         <div className="grid grid-cols-2 gap-3">
           <div className="col-span-2">
-            <label className="block text-sm mb-1">Title *</label>
+            <label className="block text-sm mb-1">Titre *</label>
             <input
               className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.title}
               onChange={(e) => onFormChange({ ...form, title: e.target.value })}
-              placeholder="My delicious recipe"
+              placeholder="Ma délicieuse recette"
             />
           </div>
           <div className="col-span-2">
@@ -50,17 +50,17 @@ export function RecipeForm({
               rows={3}
               value={form.description}
               onChange={(e) => onFormChange({ ...form, description: e.target.value })}
-              placeholder="Describe your recipe..."
+              placeholder="Décrivez votre recette..."
             />
           </div>
           <div>
-            <label className="block text-sm mb-1">Category *</label>
+            <label className="block text-sm mb-1">Catégorie *</label>
             <select
               className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.categoryId}
               onChange={(e) => onFormChange({ ...form, categoryId: e.target.value })}
             >
-              <option value="">Select a category</option>
+              <option value="">Sélectionnez une catégorie</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -69,7 +69,7 @@ export function RecipeForm({
             </select>
           </div>
           <div>
-            <label className="block text-sm mb-1">Prep Time (minutes)</label>
+            <label className="block text-sm mb-1">Temps de préparation (minutes)</label>
             <input
               type="number"
               className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
@@ -82,7 +82,7 @@ export function RecipeForm({
             />
           </div>
           <div className="col-span-2">
-            <label className="block text-sm mb-1">Difficulty</label>
+            <label className="block text-sm mb-1">Difficulté</label>
             <select
               className="w-full border border-zinc-300 dark:border-white/20 rounded-md px-3 py-2 bg-white dark:bg-zinc-800"
               value={form.difficulty ?? ''}
@@ -93,10 +93,10 @@ export function RecipeForm({
                 })
               }
             >
-              <option value="">Select difficulty</option>
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
+              <option value="">Sélectionnez la difficulté</option>
+              <option value="Easy">Facile</option>
+              <option value="Medium">Moyenne</option>
+              <option value="Hard">Difficile</option>
             </select>
           </div>
           <div className="col-span-2 flex justify-end gap-2">
@@ -104,13 +104,13 @@ export function RecipeForm({
               className="px-4 py-2 rounded-md border border-zinc-300 dark:border-white/20 hover:bg-zinc-100 dark:hover:bg-white/10"
               onClick={onCancel}
             >
-              Cancel
+              Annuler
             </button>
             <button
               className="px-4 py-2 rounded-md border border-transparent bg-orange-600 text-white hover:bg-orange-500"
               onClick={onSubmit}
             >
-              {isEdit ? 'Save' : 'Create'}
+              {isEdit ? 'Enregistrer' : 'Créer'}
             </button>
           </div>
         </div>
