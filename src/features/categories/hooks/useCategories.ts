@@ -7,7 +7,6 @@ type FormData = { id?: string; name: string }
 type FormMode = 'create' | 'edit'
 
 export function useCategories() {
-  // Search sans debouncing (client-side filtering)
   const { search, handleSearchChange, handleSearchSubmit, handleSearchReset } = useSearch({ 
     useDebounce: false 
   })
@@ -16,13 +15,11 @@ export function useCategories() {
   const [formMode, setFormMode] = useState<FormMode>('create')
   const [form, setForm] = useState<FormData>({ name: '' })
 
-  // React Query hooks
   const { data: categoriesData, isLoading } = useCategoriesQuery()
   const createMutation = useCreateCategory()
   const updateMutation = useUpdateCategory()
   const deleteMutation = useDeleteCategory()
 
-  // Filtered and sorted categories
   const visibleItems = useMemo(() => {
     const categories = categoriesData ?? []
     return categories

@@ -14,12 +14,10 @@ type FormData = {
 }
 
 export function useRecipes() {
-  // Search avec debouncing (server-side)
   const { search, debouncedSearch, handleSearchChange, handleSearchSubmit, handleSearchReset: baseSearchReset } = useSearch({ 
     useDebounce: true 
   })
 
-  // Category filter
   const [categoryFilter, setCategoryFilter] = useState('')
 
   const [formOpen, setFormOpen] = useState(false)
@@ -32,11 +30,9 @@ export function useRecipes() {
     categoryId: '',
   })
 
-  // Manage ingredients modal state
   const [ingredientsModalOpen, setIngredientsModalOpen] = useState(false)
   const [managingRecipeId, setManagingRecipeId] = useState<string | null>(null)
 
-  // React Query hooks with search and category filter
   const { data: recipesData, isLoading: isLoadingRecipes } = useRecipesQuery(debouncedSearch, categoryFilter)
   const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery()
   const { data: ingredientsData, isLoading: isLoadingIngredients } = useIngredientsQuery()

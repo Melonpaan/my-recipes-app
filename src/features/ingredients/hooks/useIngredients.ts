@@ -16,7 +16,6 @@ type FormData = { id?: string; name: string; unitId: string; stockQty: string }
 type FormMode = 'create' | 'edit'
 
 export function useIngredients() {
-  // Search avec debouncing (server-side)
   const { search, debouncedSearch, handleSearchChange, handleSearchSubmit, handleSearchReset } = useSearch({ 
     useDebounce: true 
   })
@@ -29,7 +28,6 @@ export function useIngredients() {
     stockQty: '0',
   })
 
-  // React Query hooks
   const { data: ingredientsData, isLoading: isLoadingIngredients } = useIngredientsQuery(debouncedSearch)
   const { data: unitsData, isLoading: isLoadingUnits } = useUnitsQuery()
   const createMutation = useCreateIngredient()

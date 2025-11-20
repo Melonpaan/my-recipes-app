@@ -11,7 +11,6 @@ type RecipesTableProps = {
 }
 
 export function RecipesTable({ recipes, categories, onEdit, onDelete, onManageIngredients }: RecipesTableProps) {
-  // Create a lookup map for better performance (O(1) instead of O(n) for each row)
   const categoryMap = useMemo(() => {
     return new Map(categories.map((c) => [c.id, c.name]))
   }, [categories])

@@ -1,14 +1,10 @@
 import { useState } from 'react'
 
 interface UseSearchOptions {
-  useDebounce?: boolean  // true = server-side search, false = client-side
+  useDebounce?: boolean
 }
 
-/**
- * Hook générique pour gérer la logique de recherche
- * Supporte le debouncing pour les recherches côté serveur
- * ou le filtrage direct côté client
- */
+/** Hook de recherche générique (supporte debouncing server-side ou filtrage client) */
 export function useSearch(options: UseSearchOptions = {}) {
   const { useDebounce = false } = options
   
@@ -23,7 +19,6 @@ export function useSearch(options: UseSearchOptions = {}) {
     if (useDebounce) {
       setDebouncedSearch(search)
     }
-    // Si pas de debounce, le filtrage se fait côté client avec `search` directement
   }
 
   function handleSearchReset() {

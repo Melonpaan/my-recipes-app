@@ -17,12 +17,10 @@ const Input = z.object({
 export async function setRecipeIngredients(input: RecipeIngredientsSetRequest): Promise<{ ok: true }> {
   const p = Input.parse(input)
 
-  // Vérifier que la recette existe
   const exists = await findRecipeById(p.recipeId)
   if (!exists) throw AppError.notFound('recipe', p.recipeId)
 
   try {
-    // Convertir les quantities de number vers string pour Prisma
     await setRecipeIngredientsRepo({
       recipeId: p.recipeId,
       ingredients: p.ingredients.map((ing) => ({

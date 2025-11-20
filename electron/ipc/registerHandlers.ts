@@ -17,23 +17,18 @@ import { createCategory } from '../application/usecases/categories/createCategor
 import { updateCategory } from '../application/usecases/categories/updateCategory'
 import { deleteCategory } from '../application/usecases/categories/deleteCategory'
 
-// Helper to preserve error messages across IPC boundary
 function wrapHandler<T, R>(handler: (input: T) => Promise<R>) {
   return async (_event: unknown, request: T) => {
     try {
       return await handler(request)
     } catch (error) {
-      // Re-throw with preserved message for IPC serialization
       throw new Error(error instanceof Error ? error.message : 'Unknown error')
     }
   }
 }
 
 export function registerIpcHandlers(): void {
-  // Ping
   ipcMain.handle(Channels.App_Ping, wrapHandler(ping))
-
-  // Recipes
   ipcMain.handle(Channels.Recipes_List, wrapHandler(listRecipes))
   ipcMain.handle(Channels.Recipes_Get, wrapHandler(getRecipe))
   ipcMain.handle(Channels.Recipes_Create, wrapHandler(createRecipe))
@@ -41,16 +36,13 @@ export function registerIpcHandlers(): void {
   ipcMain.handle(Channels.Recipes_Delete, wrapHandler(deleteRecipe))
   ipcMain.handle(Channels.RecipeIngredients_Set, wrapHandler(setRecipeIngredients))
 
-  // Ingredients
   ipcMain.handle(Channels.Ingredients_List, wrapHandler(listIngredients))
   ipcMain.handle(Channels.Ingredients_Create, wrapHandler(createIngredientUc))
   ipcMain.handle(Channels.Ingredients_Update, wrapHandler(updateIngredientUc))
   ipcMain.handle(Channels.Ingredients_Delete, wrapHandler(deleteIngredientUc))
 
-  // Units
   ipcMain.handle(Channels.Units_List, wrapHandler(listUnits))
 
-  // Categories
   ipcMain.handle(Channels.Categories_List, wrapHandler(listCategories))
   ipcMain.handle(Channels.Categories_Create, wrapHandler(createCategory))
   ipcMain.handle(Channels.Categories_Update, wrapHandler(updateCategory))

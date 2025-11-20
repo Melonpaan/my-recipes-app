@@ -25,10 +25,8 @@ export function ManageIngredientsModal({
   onSave,
   onCancel,
 }: ManageIngredientsModalProps) {
-  // Initialiser l'état avec les ingrédients actuels
   const [items, setItems] = useState<IngredientFormItem[]>([])
 
-  // Réinitialiser le state quand le modal s'ouvre ou que currentIngredients change
   useEffect(() => {
     if (isOpen) {
       setItems(
@@ -42,7 +40,6 @@ export function ManageIngredientsModal({
 
   const [selectedIngredientId, setSelectedIngredientId] = useState('')
 
-  // Ingrédients disponibles (pas encore dans la liste)
   const availableOptions = useMemo(() => {
     const usedIds = new Set(items.map((i) => i.ingredientId))
     return availableIngredients.filter((ing) => !usedIds.has(ing.id))

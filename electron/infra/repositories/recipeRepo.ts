@@ -148,14 +148,11 @@ export async function setRecipeIngredients(data: {
 }) {
   const recipeId = BigInt(data.recipeId)
 
-  // Transaction atomique : delete all + insert new
   await prisma.$transaction(async (tx) => {
-    // 1. Supprimer tous les ingrédients existants
     await tx.recipe_ingredients.deleteMany({
       where: { id_recipe: recipeId },
     })
 
-    // 2. Insérer les nouveaux (si non vide)
     if (data.ingredients.length > 0) {
       await tx.recipe_ingredients.createMany({
         data: data.ingredients.map((ing) => ({

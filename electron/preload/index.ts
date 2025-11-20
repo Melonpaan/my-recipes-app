@@ -26,7 +26,6 @@ import {
   type RecipeIngredientsSetRequest,
 } from '../../shared/ipc'
 
-// --------- Expose a minimal, typed API to the Renderer process ---------
 const api = {
   ingredients: {
     list: (req?: IngredientsListRequest) =>

@@ -155,8 +155,8 @@ my-recipes-app/
 │   │   └── useSearch.ts           # Hook générique de recherche
 │   ├── utils/                      # Utilitaires
 │   │   ├── errorUtils.ts          # Extraction messages d'erreur IPC
-│   │   ├── translationUtils.ts    # Traduction difficulté (Easy → Facile)
-│   │   └── validationUtils.ts     # Validation stock (sans regex)
+│   │   ├── translationUtils.ts    # Traduction difficulté 
+│   │   └── validationUtils.ts     # Validation stock
 │   ├── ipc/
 │   │   └── api.ts                 # Wrapper window.api
 │   ├── lib/

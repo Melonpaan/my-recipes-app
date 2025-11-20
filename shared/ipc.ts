@@ -1,5 +1,3 @@
-// Central IPC contracts (channels + DTOs) shared between Main and Renderer
-
 export const Channels = {
   App_Ping: 'app:ping',
   Recipes_List: 'recipes:list',
@@ -37,12 +35,11 @@ export interface RecipeDTO {
 export interface RecipeIngredientDTO {
   ingredientId: string
   ingredientName: string
-  quantity: string  // Decimal → string (comme stockQty)
-  unitCode: string  // ex: "g", "ml" pour affichage
-  unitName: string  // ex: "gramme", "millilitre"
+  quantity: string
+  unitCode: string
+  unitName: string
 }
 
-// Recipe avec ses ingrédients (pour recipes:get)
 export interface RecipeDetailDTO extends RecipeDTO {
   ingredients: RecipeIngredientDTO[]
 }
