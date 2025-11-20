@@ -20,18 +20,6 @@ export function useRecipeQuery(id: string | null) {
   })
 }
 
-export function useCategoriesQuery() {
-  return useQuery({
-    queryKey: ['categories'],
-    queryFn: async () => {
-      const res = await api.categories.list({ page: 1, pageSize: 100 })
-      return res.items
-    },
-    staleTime: 1000 * 60 * 10, // 10 minutes - categories change rarely
-    refetchOnMount: true,
-  })
-}
-
 export function useCreateRecipe() {
   const queryClient = useQueryClient()
   const toast = useToast()

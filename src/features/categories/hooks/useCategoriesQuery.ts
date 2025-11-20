@@ -11,6 +11,7 @@ export function useCategoriesQuery() {
       const res = await api.categories.list({ page: 1, pageSize: 100 })
       return res.items
     },
+    staleTime: 1000 * 60 * 10, // 10 minutes - categories change rarely
     refetchOnMount: true,
   })
 }

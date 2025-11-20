@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { useRecipesQuery, useRecipeQuery, useCategoriesQuery, useCreateRecipe, useUpdateRecipe, useDeleteRecipe, useSetRecipeIngredients } from './useRecipesQuery'
+import { useRecipesQuery, useRecipeQuery, useCreateRecipe, useUpdateRecipe, useDeleteRecipe, useSetRecipeIngredients } from './useRecipesQuery'
+import { useCategoriesQuery } from '../../categories/hooks/useCategoriesQuery'
 import { useIngredientsQuery, useUnitsQuery } from '../../ingredients/hooks/useIngredientsQuery'
 import { useToast } from '../../../components/Toaster'
 
