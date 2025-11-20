@@ -17,7 +17,6 @@ export const Channels = {
   Categories_Create: 'categories:create',
   Categories_Update: 'categories:update',
   Categories_Delete: 'categories:delete',
-  Ingredients_Usage: 'ingredients:usage',
 } as const
 
 export type ChannelName = typeof Channels[keyof typeof Channels]
@@ -144,10 +143,6 @@ export interface UnitsListResponse {
   pageSize: number
 }
 
-// Ingredient usage
-export interface IngredientUsageRequest { id: string }
-export interface IngredientUsageResponse { count: number }
-
 // Categories
 export interface CategoryDTO {
   id: string
@@ -190,7 +185,6 @@ export interface InvokeContracts {
   [Channels.Ingredients_Delete]: { request: IngredientDeleteRequest; response: { ok: true } }
 
   [Channels.Units_List]: { request: UnitsListRequest; response: UnitsListResponse }
-  [Channels.Ingredients_Usage]: { request: IngredientUsageRequest; response: IngredientUsageResponse }
   [Channels.Categories_List]: { request: CategoriesListRequest; response: CategoriesListResponse }
   [Channels.Categories_Create]: { request: CategoryCreateRequest; response: CategoryCreateResponse }
   [Channels.Categories_Update]: { request: CategoryUpdateRequest; response: { ok: true } }

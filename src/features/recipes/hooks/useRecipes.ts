@@ -77,18 +77,24 @@ export function useRecipes() {
     setFormOpen(false)
   }
 
-  function handleSubmit() {
-    // Basic validation
+  function validateRecipeForm(): { isValid: boolean; categoryId?: string } {
     if (!form.title.trim()) {
       toast.error('Le titre est requis')
-      return
+      return { isValid: false }
     }
 
     const categoryId = form.categoryId || categories[0]?.id
     if (!categoryId) {
       toast.error('Veuillez sélectionner une catégorie')
-      return
+      return { isValid: false }
     }
+
+    return { isValid: true, categoryId }
+  }
+
+  function handleSubmit() {
+    const validation = validateRecipeForm()
+    if (!validation.isValid) return
 
     createMutation.mutate(
       {
@@ -96,7 +102,7 @@ export function useRecipes() {
         description: form.description || '',
         prepTime: form.prepTime,
         difficulty: form.difficulty,
-        categoryId,
+        categoryId: validation.categoryId!,
         userId: null,
       },
       {
@@ -124,22 +130,16 @@ export function useRecipes() {
   }
 
   function handleUpdate(id: string) {
-    if (!form.title.trim()) {
-      toast.error('Le titre est requis')
-      return
-    }
-    const categoryId = form.categoryId || categories[0]?.id
-    if (!categoryId) {
-      toast.error('Veuillez sélectionner une catégorie')
-      return
-    }
+    const validation = validateRecipeForm()
+    if (!validation.isValid) return
+
     updateMutation.mutate({
       id,
       title: form.title.trim(),
       description: form.description || '',
       prepTime: form.prepTime,
       difficulty: form.difficulty,
-      categoryId,
+      categoryId: validation.categoryId!,
       userId: null,
     }, {
       onSuccess: () => setFormOpen(false),

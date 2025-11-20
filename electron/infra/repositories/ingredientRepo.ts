@@ -82,8 +82,3 @@ export async function updateIngredient(data: { id: string; name?: string; unitId
 export async function deleteIngredient(id: string) {
   await prisma.ingredients.delete({ where: { id_ingredient: BigInt(id) } })
 }
-
-export async function countIngredientUsage(id: string) {
-  const count = await prisma.recipe_ingredients.count({ where: { id_ingredient: BigInt(id) } })
-  return { count }
-}

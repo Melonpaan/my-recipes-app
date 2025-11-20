@@ -24,8 +24,6 @@ import {
   type RecipesUpdateRequest,
   type RecipesDeleteRequest,
   type RecipeIngredientsSetRequest,
-  type IngredientUsageRequest,
-  type IngredientUsageResponse,
 } from '../../shared/ipc'
 
 // --------- Expose a minimal, typed API to the Renderer process ---------
@@ -39,8 +37,6 @@ const api = {
       ipcRenderer.invoke(Channels.Ingredients_Update, req) as Promise<{ ok: true }>,
     delete: (req: IngredientDeleteRequest) =>
       ipcRenderer.invoke(Channels.Ingredients_Delete, req) as Promise<{ ok: true }>,
-    usage: (req: IngredientUsageRequest) =>
-      ipcRenderer.invoke(Channels.Ingredients_Usage, req) as Promise<IngredientUsageResponse>,
   },
   units: {
     list: (req?: UnitsListRequest) =>

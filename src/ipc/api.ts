@@ -5,8 +5,6 @@ import type {
   IngredientCreateResponse,
   IngredientUpdateRequest,
   IngredientDeleteRequest,
-  IngredientUsageRequest,
-  IngredientUsageResponse,
   UnitsListRequest,
   UnitsListResponse,
   CategoriesListRequest,
@@ -32,7 +30,6 @@ export const api = {
     create: (req: IngredientCreateRequest) => window.api.ingredients.create(req) as Promise<IngredientCreateResponse>,
     update: (req: IngredientUpdateRequest) => window.api.ingredients.update(req) as Promise<{ ok: true }>,
     delete: (req: IngredientDeleteRequest) => window.api.ingredients.delete(req) as Promise<{ ok: true }>,
-    usage: (req: IngredientUsageRequest) => window.api.ingredients.usage(req) as Promise<IngredientUsageResponse>,
   },
   units: {
     list: (req?: UnitsListRequest) => window.api.units.list(req) as Promise<UnitsListResponse>,

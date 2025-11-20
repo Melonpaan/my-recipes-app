@@ -45,8 +45,6 @@ type RecipesCreateResponse = import('../shared/ipc').RecipesCreateResponse
 type RecipesUpdateRequest = import('../shared/ipc').RecipesUpdateRequest
 type RecipesDeleteRequest = import('../shared/ipc').RecipesDeleteRequest
 type RecipeIngredientsSetRequest = import('../shared/ipc').RecipeIngredientsSetRequest
-type IngredientUsageRequest = import('../shared/ipc').IngredientUsageRequest
-type IngredientUsageResponse = import('../shared/ipc').IngredientUsageResponse
 
 interface Window {
   api: {
@@ -55,7 +53,6 @@ interface Window {
       create(req: IngredientCreateRequest): Promise<IngredientCreateResponse>
       update(req: IngredientUpdateRequest): Promise<{ ok: true }>
       delete(req: IngredientDeleteRequest): Promise<{ ok: true }>
-      usage(req: IngredientUsageRequest): Promise<IngredientUsageResponse>
     }
     units: {
       list(req?: UnitsListRequest): Promise<UnitsListResponse>

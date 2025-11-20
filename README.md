@@ -24,7 +24,8 @@ Application desktop de gestion de recettes et d'ingrédients développée avec E
 - Association à une catégorie
 - Composition : ajout/suppression d'ingrédients avec quantités personnalisées
 - Modal de gestion des ingrédients par recette
-- Affichage des catégories dans le tableau
+- Recherche par titre avec debouncing
+- Filtrage par catégorie
 
 ### Interface Utilisateur
 - Dark mode / Light mode avec toggle persistant
@@ -93,8 +94,7 @@ my-recipes-app/
 │   │       │   ├── listIngredients.ts
 │   │       │   ├── createIngredient.ts
 │   │       │   ├── updateIngredient.ts
-│   │       │   ├── deleteIngredient.ts
-│   │       │   └── usageIngredient.ts
+│   │       │   └── deleteIngredient.ts
 │   │       ├── units/
 │   │       │   └── listUnits.ts
 │   │       └── categories/
@@ -126,7 +126,6 @@ my-recipes-app/
 │   │   │   │   └── useIngredientsQuery.ts
 │   │   │   └── components/
 │   │   │       ├── index.ts
-│   │   │       ├── IngredientsFilters.tsx
 │   │   │       ├── IngredientsTable.tsx
 │   │   │       └── IngredientForm.tsx
 │   │   ├── categories/
@@ -136,7 +135,6 @@ my-recipes-app/
 │   │   │   │   └── useCategoriesQuery.ts
 │   │   │   └── components/
 │   │   │       ├── index.ts
-│   │   │       ├── CategoriesFilters.tsx
 │   │   │       ├── CategoriesTable.tsx
 │   │   │       └── CategoryForm.tsx
 │   │   └── recipes/
@@ -151,9 +149,13 @@ my-recipes-app/
 │   │           └── ManageIngredientsModal.tsx
 │   ├── components/                 # Composants partagés
 │   │   ├── AppShell.tsx           # Header + navigation + theme toggle
+│   │   ├── SearchFilters.tsx      # Barre de recherche générique
 │   │   └── Toaster.tsx            # Système de notifications
+│   ├── hooks/                      # Hooks partagés
+│   │   └── useSearch.ts           # Hook générique de recherche
 │   ├── utils/                      # Utilitaires
 │   │   ├── errorUtils.ts          # Extraction messages d'erreur IPC
+│   │   ├── translationUtils.ts    # Traduction difficulté (Easy → Facile)
 │   │   └── validationUtils.ts     # Validation stock (sans regex)
 │   ├── ipc/
 │   │   └── api.ts                 # Wrapper window.api
@@ -163,10 +165,12 @@ my-recipes-app/
 │   └── main.tsx
 │
 ├── shared/                         # Code partagé Main/Renderer
-│   └── ipc.ts                     # Contrats IPC (channels + DTOs)
+│   ├── ipc.ts                     # Contrats IPC (channels + DTOs)
+│   └── utils.ts                   # Utilitaires partagés (parseStockQty)
 │
 ├── prisma/
-│   └── schema.prisma              # Modèle de données MySQL
+│   ├── schema.prisma              # Modèle de données MySQL
+│   └── seed.mjs                   # Script de seed (unités françaises)
 │
 └── package.json
 ```
@@ -206,10 +210,11 @@ my-recipes-app/
 ### Frontend (Feature-Based)
 
 - **Hooks personnalisés** : Séparation logique/présentation
-- **React Query** : Cache, mutations et state management
-- **Composants atomiques** : Réutilisables avec props typées
+- **React Query** : Cache, mutations et state management avec `staleTime` optimisé
+- **Composants génériques** : `SearchFilters`, `useSearch` réutilisables
 - **Feature folders** : Organisation par domaine métier (ingredients, categories, recipes)
-- **Utils partagés** : Fonctions lisibles et documentées
+- **Utils partagés** : Fonctions lisibles et documentées 
+- **Traduction UI** : Interface 100% française avec traduction des enums
 
 ## Sécurité Electron
 

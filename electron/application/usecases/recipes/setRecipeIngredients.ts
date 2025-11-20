@@ -34,10 +34,10 @@ export async function setRecipeIngredients(input: RecipeIngredientsSetRequest): 
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2003') {
-        throw AppError.foreignKeyViolation('Invalid ingredient reference')
+        throw AppError.foreignKeyViolation('Référence d\'ingrédient invalide')
       }
       if (error.code === 'P2002') {
-        throw AppError.conflict('Duplicate ingredient in recipe')
+        throw AppError.conflict('Ingrédient déjà présent dans cette recette')
       }
     }
     throw error

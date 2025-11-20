@@ -16,7 +16,6 @@ import { listCategories } from '../application/usecases/categories/listCategorie
 import { createCategory } from '../application/usecases/categories/createCategory'
 import { updateCategory } from '../application/usecases/categories/updateCategory'
 import { deleteCategory } from '../application/usecases/categories/deleteCategory'
-import { usageIngredientUc } from '../application/usecases/ingredients/usageIngredient'
 
 // Helper to preserve error messages across IPC boundary
 function wrapHandler<T, R>(handler: (input: T) => Promise<R>) {
@@ -47,7 +46,6 @@ export function registerIpcHandlers(): void {
   ipcMain.handle(Channels.Ingredients_Create, wrapHandler(createIngredientUc))
   ipcMain.handle(Channels.Ingredients_Update, wrapHandler(updateIngredientUc))
   ipcMain.handle(Channels.Ingredients_Delete, wrapHandler(deleteIngredientUc))
-  ipcMain.handle(Channels.Ingredients_Usage, wrapHandler(usageIngredientUc))
 
   // Units
   ipcMain.handle(Channels.Units_List, wrapHandler(listUnits))

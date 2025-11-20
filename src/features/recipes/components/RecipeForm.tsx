@@ -77,7 +77,7 @@ export function RecipeForm({
               onChange={(e) =>
                 onFormChange({ ...form, prepTime: e.target.value ? parseInt(e.target.value) : null })
               }
-              placeholder="30"
+              placeholder="ex: 20"
               min="0"
             />
           </div>
