@@ -68,7 +68,7 @@ export function useIngredients() {
   }
 
   function handleDelete(id: string) {
-    if (!confirm('Delete this ingredient?')) return
+    if (!confirm('Supprimer cet ingrédient ?')) return
     deleteMutation.mutate(id)
   }
 

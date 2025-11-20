@@ -42,7 +42,7 @@ export function useCategories() {
   }
 
   function handleDelete(id: string) {
-    if (!confirm('Delete this category?')) return
+    if (!confirm('Supprimer cette catégorie ?')) return
     deleteMutation.mutate({ id })
   }
 

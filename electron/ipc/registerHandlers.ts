@@ -31,46 +31,32 @@ function wrapHandler<T, R>(handler: (input: T) => Promise<R>) {
 }
 
 export function registerIpcHandlers(): void {
-  ipcMain.handle(Channels.App_Ping, async () => {
-    return await ping()
-  })
+  // Ping
+  ipcMain.handle(Channels.App_Ping, wrapHandler(ping))
 
-  ipcMain.handle(Channels.Recipes_List, async (_event, request) => {
-    return await listRecipes(request)
-  })
-
-  ipcMain.handle(Channels.Recipes_Get, async (_event, request) => {
-    return await getRecipe(request)
-  })
-
+  // Recipes
+  ipcMain.handle(Channels.Recipes_List, wrapHandler(listRecipes))
+  ipcMain.handle(Channels.Recipes_Get, wrapHandler(getRecipe))
   ipcMain.handle(Channels.Recipes_Create, wrapHandler(createRecipe))
   ipcMain.handle(Channels.Recipes_Update, wrapHandler(updateRecipe))
   ipcMain.handle(Channels.Recipes_Delete, wrapHandler(deleteRecipe))
   ipcMain.handle(Channels.RecipeIngredients_Set, wrapHandler(setRecipeIngredients))
 
-  ipcMain.handle(Channels.Ingredients_List, async (_event, request) => {
-    return await listIngredients(request)
-  })
-
+  // Ingredients
+  ipcMain.handle(Channels.Ingredients_List, wrapHandler(listIngredients))
   ipcMain.handle(Channels.Ingredients_Create, wrapHandler(createIngredientUc))
   ipcMain.handle(Channels.Ingredients_Update, wrapHandler(updateIngredientUc))
   ipcMain.handle(Channels.Ingredients_Delete, wrapHandler(deleteIngredientUc))
+  ipcMain.handle(Channels.Ingredients_Usage, wrapHandler(usageIngredientUc))
 
-  ipcMain.handle(Channels.Units_List, async (_event, request) => {
-    return await listUnits(request)
-  })
+  // Units
+  ipcMain.handle(Channels.Units_List, wrapHandler(listUnits))
 
-  ipcMain.handle(Channels.Categories_List, async (_event, request) => {
-    return await listCategories(request)
-  })
-
+  // Categories
+  ipcMain.handle(Channels.Categories_List, wrapHandler(listCategories))
   ipcMain.handle(Channels.Categories_Create, wrapHandler(createCategory))
   ipcMain.handle(Channels.Categories_Update, wrapHandler(updateCategory))
   ipcMain.handle(Channels.Categories_Delete, wrapHandler(deleteCategory))
-
-  ipcMain.handle(Channels.Ingredients_Usage, async (_event, request) => {
-    return await usageIngredientUc(request)
-  })
 }
 
 
